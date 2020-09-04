@@ -1,0 +1,28 @@
+<div>
+    <div class="round-details">
+        {{data?.round?.name}}
+        <br />
+        <span class="date">{{data?.round?.description}}</span>
+    </div>
+
+        <div class="flex-container">
+            <div style="flex-grow: 3; text-align: left; padding: 0px 20px">{{data?.match?.playerA?.name}}</div>
+            
+            <div *ngFor="let result of data?.match?.resultA; trackBy: cmpare; let i=index" style="margin-left:10px;" >
+                <input matInput type="number" min="0" max="999" placeholder="-"
+                    [style.color]="data?.match?.resultA[i]>data?.match?.resultB[i]?'#35a461':'gray'"
+                    [(ngModel)]="data?.match?.resultA[i]"
+                    (changes)="data?.match?.resultA[i]=data?.match?.resultA[i].toFixed()">
+            </div>
+            
+        </div>
+
+        <div class="flex-container">
+            <div style="flex-grow: 3; text-align: left; padding: 0px 20px">{{data?.match?.playerB?.name}}</div>
+            <div *ngFor="let result of data?.match?.resultB; trackBy: cmpare; let i=index" style="margin-left:10px;">
+                <input matInput type="number" min="0" max="999" placeholder="-"
+                    [style.color]="data?.match?.resultA[i]<data?.match?.resultB[i]?'#35a461':'gray'"
+                    [(ngModel)]="data?.match?.resultB[i]">
+            </div>
+        </div>
+</div>

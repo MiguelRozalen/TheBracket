@@ -1,123 +1,91 @@
 <header class="hero">
   <div class="hero-wrap">
-    <p class="intro" id="intro">Cuadro de Copa</p>
-    <h1 id="headline">Diversificación</h1>
-    <p class="year"><i class="fa fa-star"></i> 2020-2021 <i class="fa fa-star"></i></p>
-    <p>DISCAPACILeague</p>
+    <p class="intro notOutlined" id="intro" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"
+      contenteditable="true" [textContent]="championship.description"
+      (input)="championship.description=$event.target.textContent"></p>
+    <h1 id="headline" class="notOutlined" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"
+      contenteditable="true" [textContent]="championship.name" (input)="championship.name=$event.target.textContent">
+    </h1>
+    <p class="year">
+      <i class="fa fa-star"></i>
+      <span class="notOutlined" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"
+        contenteditable="true" [textContent]="championship.season"
+        (input)="championship.season=$event.target.textContent"></span>
+      <i class="fa fa-star"></i></p>
+    <p class="notOutlined" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"
+      contenteditable="true" [textContent]="championship.league"
+      (input)="championship.league=$event.target.textContent"></p>
+
+    <button mat-stroked-button>Load Championship</button>
+    <button mat-flat-button style="margin-left:20px; background-color: #5cca87">New Championship</button>
   </div>
 </header>
 
-
 <section id="bracket">
   <div class="container">
+
     <div class="split split-one">
-      <div class="round round-one">
-        <div class="round-details">Ronda 1<br /><span class="date">Jornada 1</span></div>
-        <ul class="matchup">
-          <li class="team team-top won">Comandante Aranda<span class="score">3</span></li>
-          <li class="team team-bottom">Bye<span class="score">0</span></li>
+      <div class="round" [ngClass]="{current:index==championship?.roundActive}"
+        *ngFor="let round of championship?.rounds | slice:0:championship?.rounds?.length-2 ; let index=index">
+        <div class="round-details">{{round?.name}}<br /><span class="date">{{round?.description}}</span></div>
+        <ul class="matchup" [style.paddingTop.px]="getPadding(index)" [style.paddingBottom.px]="getPadding(index)"
+          *ngFor="let match of round?.matches | slice:0:(round?.matches?.length/2)">
+          <li (click)="setResult(match, round, championship)" class="team team-top"
+            [ngClass]="{won: match?.winner==match?.playerA}">
+            {{match?.playerA?.name}}
+            <span class="score" [style.color]="match?.totalA>match?.totalB?'#35a461':'gray'">{{match?.totalA}}</span>
+          </li>
+          <li (click)="setResult(match, round, championship)" class="team team-bottom"
+            [ngClass]="{won: match?.winner==match?.playerB}">{{match?.playerB?.name}}
+            <span class="score" [style.color]="match?.totalA<match?.totalB?'#35a461':'gray'">{{match?.totalB}}</span>
+          </li>
         </ul>
-        <ul class="matchup">
-          <li class="team team-top won">Rozalén<span class="score">2</span></li>
-          <li class="team team-bottom">Sergio<span class="score">1</span></li>
-        </ul>
-        <ul class="matchup">
-          <li class="team team-top won">Tello<span class="score">3</span></li>
-          <li class="team team-bottom">Jorge Díaz Toledano<span class="score">0</span></li>
-        </ul>
-        <ul class="matchup">
-          <li class="team team-top won">Javy Fray<span class="score">3</span></li>
-          <li class="team team-bottom">Jesus Sanchez Galán<span class="score">0</span></li>
-        </ul>
-        
-      </div> <!-- END ROUND ONE -->
-
-      <div class="round round-two">
-        <div class="round-details">Ronda 2<br /><span class="date">Jornada 4</span></div>
-        <ul class="matchup">
-          <li class="team team-top">Comandante Aranda<span class="score">0</span></li>
-          <li class="team team-bottom won">Rozalén<span class="score">3</span></li>
-        </ul>
-        <ul class="matchup">
-          <li class="team team-top">Tello<span class="score">0</span></li>
-          <li class="team team-bottom won">Javy Fray<span class="score">3</span></li>
-        </ul>
-      </div> <!-- END ROUND TWO -->
-
-      <div class="round round-three">
-        <div class="round-details">Ronda 3<br /><span class="date">Jornada 7</span></div>
-        <ul class="matchup">
-          <li class="team team-top won">Rozalén<span class="score">3</span></li>
-          <li class="team team-bottom">Javy Fray<span class="score">0</span></li>
-        </ul>
-      </div> <!-- END ROUND THREE -->
+      </div>
     </div>
 
     <div class="champion">
-      <!-- <div class="semis-l">
-        <div class="round-details">west semifinals <br /><span class="date">Jornada 10</span></div>
+      <div class="semis-l">
+        <div class="round-details">Left Semifinals <br /><span class="date">Jornada 10</span></div>
         <ul class="matchup championship">
           <li class="team team-top">&nbsp;<span class="score">&nbsp;</span></li>
           <li class="team team-bottom">&nbsp;<span class="score">&nbsp;</span></li>
         </ul>
-      </div> -->
-      <div class="final current">
+      </div>
+      <div class="final">
         <i class="fa fa-trophy"></i>
         <div class="round-details">Final <br /><span class="date">Jornada 16</span></div>
         <ul class="matchup championship">
-          <li class="team team-top">Rozalén<span class="score">3</span></li>
-          <li class="team team-bottom">DavidDB<span class="score">0</span></li>
+          <li style="text-align: left" class="team team-top">&nbsp;<span class="score">&nbsp;</span></li>
+          <li style="text-align: left" class="team team-bottom ">&nbsp;<span class="score">&nbsp;</span></li>
         </ul>
       </div>
-      <!-- <div class="semis-r">
-        <div class="round-details">east semifinals <br /><span class="date">Jornada 20</span></div>
+      <div class="semis-r">
+        <div class="round-details">Right Semifinals <br /><span class="date">Jornada 20</span></div>
         <ul class="matchup championship">
           <li class="team team-top">&nbsp;<span class="score">&nbsp;</span></li>
           <li class="team team-bottom">&nbsp;<span class="score">&nbsp;</span></li>
         </ul>
-      </div> -->
+      </div>
     </div>
 
 
     <div class="split split-two">
-
-
-      <div class="round round-three">
-        <div class="round-details">Ronda 3<br /><span class="date">Jornada 22</span></div>
-        <ul class="matchup">
-          <li class="team team-top">Sete<span class="score">0</span></li>
-          <li class="team team-bottom won">DavidDB<span class="score">3</span></li>
-        </ul>
-      </div> 
-
-      <div class="round round-two">
-        <div class="round-details">Ronda 2<br /><span class="date">Jornada 18</span></div>
-        <ul class="matchup">
-          <li class="team team-top">Pablo<span class="score">0</span></li>
-          <li class="team team-bottom won">Sete<span class="score">3</span></li>
-        </ul>
-        <ul class="matchup">
-          <li class="team team-top won">DavidDB<span class="score">3</span></li>
-          <li class="team team-bottom">Ivandelacal<span class="score">0</span></li>
-        </ul>
-      </div> 
-      <div class="round round-one">
-        <div class="round-details">Ronda 1<br /><span class="date">Jornada 16</span></div>
-        <ul class="matchup">
-          <li class="team team-top won">Pablo<span class="score">3</span></li>
-          <li class="team team-bottom">Bye<span class="score">0</span></li>
-        </ul>
-        <ul class="matchup">
-          <li class="team team-top won">Sete<span class="score">3</span></li>
-          <li class="team team-bottom">Josi21<span class="score">0</span></li>
-        </ul>
-        <ul class="matchup">
-          <li class="team team-top won">DavidDB<span class="score">3</span></li>
-          <li class="team team-bottom">Bye<span class="score">0</span></li>
-        </ul>
-        <ul class="matchup">
-          <li class="team team-top won">Ivandelacal<span class="score">3</span></li>
-          <li class="team team-bottom">Javier Suela Oliva<span class="score">0</span></li>
+      <div class="round" [ngClass]="{current:championship?.rounds?.length-2-index-1==championship?.roundActive}"
+        *ngFor="let round of (championship?.rounds | slice:0:championship?.rounds?.length-2).reverse(); let index=index">
+        <div class="round-details">{{round?.name}}<br /><span class="date">{{round?.description}}</span></div>
+        <ul class="matchup"
+          [style.paddingTop.px]="getPadding((championship?.rounds | slice:0:championship?.rounds?.length-2).length-1 - index)"
+          [style.paddingBottom.px]="getPadding((championship?.rounds | slice:0:championship?.rounds?.length-2).length-1 - index)"
+          *ngFor="let match of round?.matches | slice:(round?.matches?.length/2):round?.matches?.length">
+          <li (click)="setResult(match, round, championship)" class="team team-top"
+            [ngClass]="{won: match?.winner==match?.playerA}">
+            {{match?.playerA?.name}}
+            <span class="score" [style.color]="match?.totalA>match?.totalB?'#35a461':'gray'">{{match?.totalA}}</span>
+          </li>
+          <li (click)="setResult(match, round, championship)" class="team team-bottom"
+            [ngClass]="{won: match?.winner==match?.playerB}">{{match?.playerB?.name}}
+            <span class="score" [style.color]="match?.totalA<match?.totalB?'#35a461':'gray'">{{match?.totalB}}</span>
+          </li>
         </ul>
       </div>
     </div>
@@ -128,3 +96,19 @@
     <a class="share-icon" href="https://github.com/MiguelRozalen/" target="_new"><i class="fa fa-github"></i></a>
   </div>
 </section>
+
+<button matTooltip="Load Championship" style="position: fixed; bottom: 125px; right: 15px; background-color: #5cca87;"
+  mat-mini-fab color="accent">
+  <mat-icon class="floating-button-icon">save</mat-icon>
+</button>
+
+<button matTooltip="Save Championship" (click)="saveChampionship()"
+  style="position: fixed; bottom: 70px; right: 15px; background-color: #5cca87;" mat-mini-fab color="accent">
+  <mat-icon class="floating-button-icon">save_alt</mat-icon>
+</button>
+
+
+<button matTooltip="New Championship" style="position: fixed; bottom: 15px; right: 15px; background-color: #5cca87;"
+  mat-mini-fab color="accent">
+  <mat-icon class="floating-button-icon">add</mat-icon>
+</button>
