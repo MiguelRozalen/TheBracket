@@ -208,7 +208,7 @@
 .share-wrap {
   max-width: 1100px;
   text-align: center;
-  margin: 60px auto;
+  margin: 30px auto 20px auto;
 }
 .final {
   margin: 4.5em 0;
@@ -362,10 +362,17 @@
   color: white;
 }
 
-.notOutlined:focus{
+.notOutlined:focus {
   outline: none;
 }
 
 .lose {
   opacity: 0.45 !important;
+}
+
+.copyright {
+  text-align: center;
+  font-size: 11px;
+  color: #999999;
+  margin-bottom: 20px;
 }

@@ -51,6 +51,7 @@ input {
   width: auto;
   color: gray;
   text-align: left;
+  width: 100%;
 }
 
 /* Chrome, Safari, Edge, Opera */
@@ -90,11 +91,18 @@ p.year i {
   font-size: 1.2em;
 }
 
-.add-btn{
-    background-color: #5cca87;
-    color: white;
-    position: absolute;
-    box-shadow: none;
-    right: 5px;
-    top: 5px;
+.add-btn {
+  background-color: #5cca87;
+  color: white;
+  position: absolute;
+  box-shadow: none;
+  right: 5px;
+  top: 5px;
+}
+
+.input-container {
+  margin-left: 10px;
+  width: 100%;
+  text-align: left;
+  padding: 0px 20px;
 }

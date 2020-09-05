@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { ResultDialogComponent } from './result-dialog/result-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
 import { NewDialogComponent } from './new-dialog/new-dialog.component';
+import { shuffle, LZString } from './app.utils';
 
 @Component({
   selector: 'app-root',
@@ -31,12 +32,13 @@ export class AppComponent {
     // this.championship.name = "Diversificación"
     // this.championship.season = "2020-2021"
     // this.championship.league = "DISCAPACILeague"
-    this.createBracket()
+    this.createBracket(false)
   }
 
   newChampionship() {
     let dialogRef = this.dialog.open(NewDialogComponent, {
-      minWidth: '600px',
+      width: '600px',
+      maxWidth: '90%',
       minHeight: 400,
       data: {
         championship: {
@@ -47,7 +49,7 @@ export class AppComponent {
           bestOf: 5,
           rounds: [],
           roundActive: 0,
-        }, players: [{ name: "Player 1" }, { name: "Player 2" }, { name: "Player 3" }, { name: "Player 4" }]
+        }, players: []
       }
     });
 
@@ -55,12 +57,12 @@ export class AppComponent {
       if (result) {
         this.championship = result.championship
         this.players = result.players
-        this.createBracket()
+        this.createBracket(true)
       }
     })
   }
 
-  createBracket() {
+  createBracket(randomize: boolean) {
     this.numberOfRounds = Math.ceil(Math.log2(this.players.length))
     for (var i = 0; i < this.numberOfRounds; i++) {
 
@@ -68,7 +70,18 @@ export class AppComponent {
       var remainingPlayers: Player[]
 
       if (i == 0) {//Si es la primera ronda sacamos los partidos de los jugadores totales
+
+        //Complete the bracket
+        while (this.players.length < Math.pow(2, this.numberOfRounds)) {
+          this.players.push({ name: "-" })
+        }
+
+        if (randomize) {
+          this.players = shuffle(this.players)
+        }
+
         remainingPlayers = JSON.parse(JSON.stringify(this.players))
+
         for (var j = 0; j + 1 < remainingPlayers.length; j += 2) {
           matches.push({
             playerA: remainingPlayers[j],
@@ -80,6 +93,8 @@ export class AppComponent {
             winner: undefined
           })
         }
+
+
       } else {
         for (var j = 0; j < this.championship.rounds[this.championship.rounds.length - 1].matches.length / 2; j++) {
           matches.push({
@@ -116,9 +131,10 @@ export class AppComponent {
     var file = $event.target.files[0];
     if (file) {
       var reader = new FileReader();
-      reader.readAsText(file, "UTF-8");
+      reader.readAsText(file);
       reader.onload = (evt) => {
-        this.championship = JSON.parse(evt.target.result.toString())
+        var gZipJson = LZString.decompressFromUTF16(evt.target.result)
+        this.championship = JSON.parse(gZipJson)
       }
       reader.onerror = function (evt) {
         console.log(evt)
@@ -127,9 +143,10 @@ export class AppComponent {
   }
 
   saveChampionship() {
-    var sJson = JSON.stringify(this.championship);
+    var sJson = JSON.stringify(this.championship)
+    var gZipJson = LZString.compressToUTF16(sJson)
     var element = document.createElement('a');
-    element.setAttribute('href', "data:text/json;charset=UTF-8," + encodeURIComponent(sJson));
+    element.setAttribute('href', "data:text/json;charset=UTF-8," + encodeURIComponent(gZipJson));
     element.setAttribute('download', "The Bracket: " + this.championship.name + ".bracket");
     element.style.display = 'none';
     document.body.appendChild(element);

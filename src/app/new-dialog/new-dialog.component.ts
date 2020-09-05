@@ -9,19 +9,27 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 })
 export class NewDialogComponent implements OnInit {
 
+  numberOfPlayers: number = 4
   constructor(public dialogRef: MatDialogRef<NewDialogComponent>, @Inject(MAT_DIALOG_DATA) public data: any) { }
 
   ngOnInit(): void {
-
+    this.generatePlayers()
   }
 
-  addPlayer(index){
-    this.data.players.push({
-      name:"Player "+ index
-    })
+  generatePlayers() {
+    this.data.players = []
+    while (this.data.players.length < this.numberOfPlayers) {
+      this.data.players.push({
+        name: "Player " + (this.data.players.length+1)
+      })
+    }
   }
 
-  done(){
+  addPlayer() {
+    this.numberOfPlayers++;
+  }
+
+  done() {
     this.dialogRef.close(this.data)
   }
 }

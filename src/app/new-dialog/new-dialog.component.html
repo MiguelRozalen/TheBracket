@@ -7,42 +7,50 @@
         <ng-template matStepLabel>General Information</ng-template>
 
         <div class="flex-container">
-            <div style="flex-grow:1; text-align: left; padding: 0px 20px">Name</div>
-            <div style="margin-left:10px; flex-grow:5; text-align: left; padding: 0px 20px">
+            <div style="text-align: left; padding: 0px 20px">Name</div>
+            <div class="input-container">
                 <input matInput type="text" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="-"
                     style="color:gray" [(ngModel)]="data.championship.name">
             </div>
         </div>
 
         <div class="flex-container">
-            <div style="flex-grow:1; text-align: left; padding: 0px 20px">Season</div>
-            <div style="margin-left:10px; flex-grow:5; text-align: left; padding: 0px 20px">
+            <div style=" text-align: left; padding: 0px 20px">Description</div>
+            <div class="input-container">
+                <input matInput type="text" required autocorrect="off" autocapitalize="off" spellcheck="false"
+                    placeholder="-" style="color:gray" [(ngModel)]="data.championship.description">
+            </div>
+        </div>
+
+        <div class="flex-container">
+            <div style=" text-align: left; padding: 0px 20px">Season</div>
+            <div class="input-container">
                 <input matInput type="text" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="-"
                     style="color:gray" [(ngModel)]="data.championship.season">
             </div>
         </div>
 
         <div class="flex-container">
-            <div style="flex-grow:1; text-align: left; padding: 0px 20px">League</div>
-            <div style="margin-left:10px; flex-grow:5; text-align: left; padding: 0px 20px">
+            <div style=" text-align: left; padding: 0px 20px">League</div>
+            <div class="input-container">
                 <input matInput type="text" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="-"
                     style="color:gray" [(ngModel)]="data.championship.league">
             </div>
         </div>
 
         <div class="flex-container">
-            <div style="flex-grow:1; text-align: left; padding: 0px 20px">Best Of</div>
-            <div style="margin-left:10px; flex-grow:5; text-align: left; padding: 0px 20px">
+            <div style=" text-align: left; padding: 0px 20px">BestOf</div>
+            <div class="input-container">
                 <input matInput type="number" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="-"
                     style="color:gray" [(ngModel)]="data.championship.bestOf">
             </div>
         </div>
 
         <div class="flex-container">
-            <div style="flex-grow:1; text-align: left; padding: 0px 20px">Description</div>
-            <div style="margin-left:10px; flex-grow:5; text-align: left; padding: 0px 20px">
-                <input matInput type="text" required autocorrect="off" autocapitalize="off" spellcheck="false"
-                    placeholder="-" style="color:gray" [(ngModel)]="data.championship.description">
+            <div style=" text-align: left; padding: 0px 20px">#Players</div>
+            <div class="input-container">
+                <input matInput type="number" min="4" max="64" autocorrect="off" autocapitalize="off" spellcheck="false"
+                    placeholder="4" style="color:gray" [(ngModel)]="numberOfPlayers" (change)="generatePlayers()">
             </div>
         </div>
 
@@ -56,28 +64,29 @@
         <ng-template matStepLabel>Players</ng-template>
         <div style="max-height:400px; overflow: auto;">
             <div class="flex-container" *ngFor="let player of data?.players; let index=index">
-                <div *ngIf="index<data?.players?.length-1" style="text-align: left; padding: 0px 20px; width:100%"
-                    autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" contenteditable="true"
+                <div *ngIf="index<data?.players?.length"
+                    style="text-align: left; padding: 0px 20px; width:100%; color:gray" autocomplete="off"
+                    autocorrect="off" autocapitalize="off" spellcheck="false" contenteditable="true"
                     [textContent]="player.name" class="notOutlined" (input)="player.name=$event.target.textContent">
                 </div>
 
-                <div *ngIf="index==data?.players?.length-1" style="text-align: left; padding: 0px 20px; width:80%"
+                <!-- <div *ngIf="index==data?.players?.length-1" style="text-align: left; padding: 0px 20px; width:80%"
                     autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" contenteditable="true"
                     [textContent]="player.name" class="notOutlined" (input)="player.name=$event.target.textContent">
-                </div>
+                </div> -->
 
-                <div *ngIf="index==data?.players?.length-1">
+                <!-- <div *ngIf="index==data?.players?.length-1">
                     <button class="add-btn" mat-mini-fab aria-label="Example icon button with a home icon"
-                        (click)="addPlayer(index+2)">
+                        (click)="addPlayer()">
                         <mat-icon>add</mat-icon>
                     </button>
-                </div>
+                </div> -->
             </div>
         </div>
 
         <div style="margin-top: 20px;">
-            <button mat-flat-button
-                style="background-color: #5cca87; color:white; float: right; margin-left: 15px;" (click)="done()">Done</button>
+            <button mat-flat-button style="background-color: #5cca87; color:white; float: right; margin-left: 15px;"
+                (click)="done()">Done</button>
             <button mat-flat-button style="background-color: transparent; color:gray; float: right;"
                 matStepperPrevious>Back</button>
         </div>
