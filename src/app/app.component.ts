@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { ResultDialogComponent } from './result-dialog/result-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
+import { NewDialogComponent } from './new-dialog/new-dialog.component';
 
 @Component({
   selector: 'app-root',
@@ -13,9 +14,9 @@ export class AppComponent {
 
   public championship: Championship = {
     description: "The Bracket",
-    name: "Championship",
-    season: "Season",
-    league: "League Name",
+    name: "Rolland Garros",
+    season: "2019",
+    league: "ATP Word Tour",
     bestOf: 5,
     rounds: [],
     roundActive: 0,
@@ -31,11 +32,36 @@ export class AppComponent {
     // this.championship.season = "2020-2021"
     // this.championship.league = "DISCAPACILeague"
     this.createBracket()
+  }
 
+  newChampionship() {
+    let dialogRef = this.dialog.open(NewDialogComponent, {
+      minWidth: '600px',
+      minHeight: 400,
+      data: {
+        championship: {
+          description: "The Bracket",
+          name: "Championship",
+          season: "Season",
+          league: "League Name",
+          bestOf: 5,
+          rounds: [],
+          roundActive: 0,
+        }, players: [{ name: "Player 1" }, { name: "Player 2" }, { name: "Player 3" }, { name: "Player 4" }]
+      }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.championship = result.championship
+        this.players = result.players
+        this.createBracket()
+      }
+    })
   }
 
   createBracket() {
-    this.numberOfRounds = Math.ceil(Math.log2(this.players.length) - 2) //Final & Semi-Final
+    this.numberOfRounds = Math.ceil(Math.log2(this.players.length))
     for (var i = 0; i < this.numberOfRounds; i++) {
 
       var matches: Match[] = []
@@ -43,7 +69,6 @@ export class AppComponent {
 
       if (i == 0) {//Si es la primera ronda sacamos los partidos de los jugadores totales
         remainingPlayers = JSON.parse(JSON.stringify(this.players))
-
         for (var j = 0; j + 1 < remainingPlayers.length; j += 2) {
           matches.push({
             playerA: remainingPlayers[j],
@@ -55,11 +80,8 @@ export class AppComponent {
             winner: undefined
           })
         }
-
-      } else {//Si no hay que sacarlos de los ganadores de la anterior
-        remainingPlayers = JSON.parse(JSON.stringify(this.players))
-
-        for (var j = 0; j < Math.pow(2, this.numberOfRounds - i + 1); j++) {
+      } else {
+        for (var j = 0; j < this.championship.rounds[this.championship.rounds.length - 1].matches.length / 2; j++) {
           matches.push({
             playerA: undefined,
             playerB: undefined,
@@ -72,39 +94,55 @@ export class AppComponent {
         }
       }
 
+      var name: string
+      if (i == this.numberOfRounds - 1) {
+        name = "Final"
+      } else if (i == this.numberOfRounds - 2) {
+        name = "Semi Final"
+      } else {
+        name = "Round " + (i + 1)
+      }
+
       this.championship.rounds.push({
-        name: "Round " + (i + 1),
+        number: i,
+        name: name,
         description: "Example A",
         matches: matches
       })
     }
+  }
 
-    this.championship.rounds.push({
-      name: "Semi Final",
-      description: "Example A",
-      matches: matches
-    })
-
-    this.championship.rounds.push({
-      name: "Final",
-      description: "Example A",
-      matches: matches
-    })
-
-    console.log(this.championship)
+  loadChampionship($event: any) {
+    var file = $event.target.files[0];
+    if (file) {
+      var reader = new FileReader();
+      reader.readAsText(file, "UTF-8");
+      reader.onload = (evt) => {
+        this.championship = JSON.parse(evt.target.result.toString())
+      }
+      reader.onerror = function (evt) {
+        console.log(evt)
+      }
+    }
   }
 
   saveChampionship() {
-    console.log(this.championship)
+    var sJson = JSON.stringify(this.championship);
+    var element = document.createElement('a');
+    element.setAttribute('href', "data:text/json;charset=UTF-8," + encodeURIComponent(sJson));
+    element.setAttribute('download', "The Bracket: " + this.championship.name + ".bracket");
+    element.style.display = 'none';
+    document.body.appendChild(element);
+    element.click(); // simulate click
+    document.body.removeChild(element);
   }
 
-  getPadding(index) {
+  getPadding(index: number) {
     return 10 * (Math.pow(2, index + 2) - 3)
   }
 
-  setResult(match, round, championship) {
+  setResult(match: Match, round: Round, championship: Championship) {
     let dialogRef = this.dialog.open(ResultDialogComponent, {
-      minHeight: '300px',
       minWidth: '600px',
       data: { match, round, championship }
     });
@@ -120,7 +158,33 @@ export class AppComponent {
           match.totalA++;
         }
       }
-    });
+
+      if (match.totalA != match.totalB && (match.totalA > 0 || match.totalB > 0)) {
+        match.winner = match.totalA > match.totalB ? match.playerA : match.playerB
+        //Una vez que tenemos el ganador, lo pasamos a la siguiente ronda
+        var index = Math.floor(round.matches.indexOf(match) / 2)
+        var isTopTeam = round.matches.indexOf(match) % 2 == 0
+        var indexRound = championship.rounds.indexOf(round)
+
+        if (isTopTeam) {
+          if (indexRound + 1 < championship.rounds.length)
+            championship.rounds[indexRound + 1].matches[index].playerA = match.winner
+        } else {
+          if (indexRound + 1 < championship.rounds.length)
+            championship.rounds[indexRound + 1].matches[index].playerB = match.winner
+        }
+      }
+
+      //Calculate alctual round
+      var stop: boolean = false
+      championship.roundActive = championship.rounds.length - 1
+      championship.rounds.forEach((round: Round, index) => {
+        if (round.matches.some((m: Match) => m.playerA == undefined || m.playerB == undefined) && !stop) {
+          championship.roundActive = Math.max(index - 1, 0)
+          stop = true
+        }
+      })
+    })
   }
 
 }
@@ -153,4 +217,5 @@ export interface Round {
   matches: Match[]
   name: string
   description: string
+  number: number
 }

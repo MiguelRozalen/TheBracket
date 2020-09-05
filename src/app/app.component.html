@@ -1,3 +1,5 @@
+<input hidden type="file" #uploader accept=".bracket" (change)="loadChampionship($event)" />
+
 <header class="hero">
   <div class="hero-wrap">
     <p class="intro notOutlined" id="intro" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"
@@ -16,8 +18,9 @@
       contenteditable="true" [textContent]="championship.league"
       (input)="championship.league=$event.target.textContent"></p>
 
-    <button mat-stroked-button>Load Championship</button>
-    <button mat-flat-button style="margin-left:20px; background-color: #5cca87">New Championship</button>
+    <button mat-stroked-button (click)="uploader.click()">Load Championship</button>
+    <button mat-flat-button (click)="newChampionship()" style="margin-left:20px; background-color: #5cca87">New
+      Championship</button>
   </div>
 </header>
 
@@ -27,43 +30,118 @@
     <div class="split split-one">
       <div class="round" [ngClass]="{current:index==championship?.roundActive}"
         *ngFor="let round of championship?.rounds | slice:0:championship?.rounds?.length-2 ; let index=index">
-        <div class="round-details">{{round?.name}}<br /><span class="date">{{round?.description}}</span></div>
+        <div class="round-details">
+          <span contenteditable="true" [textContent]="round.name" class="notOutlined" autocomplete="off"
+            autocorrect="off" autocapitalize="off" spellcheck="false"
+            (input)="round.name=$event.target.textContent"></span><br />
+          <span contenteditable="true" [textContent]="round.description" class="notOutlined date" autocomplete="off"
+            autocorrect="off" autocapitalize="off" spellcheck="false"
+            (input)="round.description=$event.target.textContent"></span>
+        </div>
         <ul class="matchup" [style.paddingTop.px]="getPadding(index)" [style.paddingBottom.px]="getPadding(index)"
           *ngFor="let match of round?.matches | slice:0:(round?.matches?.length/2)">
           <li (click)="setResult(match, round, championship)" class="team team-top"
-            [ngClass]="{won: match?.winner==match?.playerA}">
+            [ngClass]="{lose: match?.winner && match?.winner?.name!=match?.playerA?.name}">
             {{match?.playerA?.name}}
-            <span class="score" [style.color]="match?.totalA>match?.totalB?'#35a461':'gray'">{{match?.totalA}}</span>
+            <span *ngIf="match?.playerA?.name" class="score"
+              [style.color]="match?.totalA>match?.totalB?'#35a461':'gray'">{{match?.totalA}}</span>
           </li>
           <li (click)="setResult(match, round, championship)" class="team team-bottom"
-            [ngClass]="{won: match?.winner==match?.playerB}">{{match?.playerB?.name}}
-            <span class="score" [style.color]="match?.totalA<match?.totalB?'#35a461':'gray'">{{match?.totalB}}</span>
+            [ngClass]="{lose: match?.winner && match?.winner?.name!=match?.playerB?.name}">{{match?.playerB?.name}}
+            <span *ngIf="match?.playerB?.name" class="score"
+              [style.color]="match?.totalA<match?.totalB?'#35a461':'gray'">{{match?.totalB}}</span>
           </li>
         </ul>
       </div>
     </div>
 
     <div class="champion">
-      <div class="semis-l">
-        <div class="round-details">Left Semifinals <br /><span class="date">Jornada 10</span></div>
+      <div class="semis-l" [ngClass]="{current:championship.rounds.length-2==championship?.roundActive}">
+        <div class="round-details">
+          <span contenteditable="true" [textContent]="championship.rounds[championship.rounds.length-2].name"
+            class="notOutlined" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"
+            (input)="championship.rounds[championship?.rounds?.length-2].name=$event.target.textContent"></span><br />
+          <span contenteditable="true" [textContent]="championship.rounds[championship.rounds.length-2].description"
+            class="notOutlined date" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"
+            (input)="championship.rounds[championship.rounds.length-2].description=$event.target.textContent"></span>
+        </div>
         <ul class="matchup championship">
-          <li class="team team-top">&nbsp;<span class="score">&nbsp;</span></li>
-          <li class="team team-bottom">&nbsp;<span class="score">&nbsp;</span></li>
+          <li
+            (click)="setResult(championship?.rounds[championship?.rounds?.length-2]?.matches[0], championship?.rounds[championship?.rounds?.length-2], championship)"
+            style="text-align: left" class="team team-top"
+            [ngClass]="{lose: championship?.rounds[championship?.rounds?.length-2]?.matches[0]?.winner && championship?.rounds[championship?.rounds?.length-2]?.matches[0]?.winner?.name!=championship?.rounds[championship?.rounds?.length-2]?.matches[0]?.playerA?.name}">
+            {{championship?.rounds[championship?.rounds?.length-2]?.matches[0]?.playerA?.name}}
+            <span *ngIf="championship?.rounds[championship?.rounds?.length-2]?.matches[0]?.playerA?.name" class="score"
+              [style.color]="championship?.rounds[championship?.rounds?.length-2]?.matches[0]?.totalA>championship?.rounds[championship?.rounds?.length-2]?.matches[0]?.totalB?'#35a461':'gray'">{{championship?.rounds[championship?.rounds?.length-2]?.matches[0]?.totalA}}</span>
+          </li>
+          <li
+            (click)="setResult(championship?.rounds[championship?.rounds?.length-2]?.matches[0], championship?.rounds[championship?.rounds?.length-2], championship)"
+            style="text-align: left" class="team team-bottom"
+            [ngClass]="{lose: championship?.rounds[championship?.rounds?.length-2]?.matches[0]?.winner && championship?.rounds[championship?.rounds?.length-2]?.matches[0]?.winner?.name!=championship?.rounds[championship?.rounds?.length-2]?.matches[0]?.playerB?.name}">
+            {{championship?.rounds[championship?.rounds?.length-2]?.matches[0]?.playerB?.name}}
+            <span *ngIf="championship?.rounds[championship?.rounds?.length-2]?.matches[0]?.playerB?.name" class="score"
+              [style.color]="championship?.rounds[championship?.rounds?.length-2]?.matches[0]?.totalA<championship?.rounds[championship?.rounds?.length-2]?.matches[0]?.totalB?'#35a461':'gray'">{{championship?.rounds[championship?.rounds?.length-2]?.matches[0]?.totalB}}</span>
+          </li>
         </ul>
       </div>
-      <div class="final">
+
+      <div class="final" [ngClass]="{current:championship.rounds.length-1==championship?.roundActive}">
         <i class="fa fa-trophy"></i>
-        <div class="round-details">Final <br /><span class="date">Jornada 16</span></div>
+        <div class="round-details">
+          <span contenteditable="true" [textContent]="championship.rounds[championship.rounds.length-1].name"
+            class="notOutlined" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"
+            (input)="championship.rounds[championship?.rounds?.length-1].name=$event.target.textContent"></span><br />
+          <span contenteditable="true" [textContent]="championship.rounds[championship.rounds.length-1].description"
+            class="notOutlined date" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"
+            (input)="championship.rounds[championship.rounds.length-1].description=$event.target.textContent"></span>
+        </div>
+
         <ul class="matchup championship">
-          <li style="text-align: left" class="team team-top">&nbsp;<span class="score">&nbsp;</span></li>
-          <li style="text-align: left" class="team team-bottom ">&nbsp;<span class="score">&nbsp;</span></li>
+          <li
+            (click)="setResult(championship?.rounds[championship?.rounds?.length-1]?.matches[0], championship?.rounds[championship?.rounds?.length-1], championship)"
+            style="text-align: left" class="team team-top"
+            [ngClass]="{lose: championship?.rounds[championship?.rounds?.length-1]?.matches[0]?.winner && championship?.rounds[championship?.rounds?.length-1]?.matches[0]?.winner?.name!=championship?.rounds[championship?.rounds?.length-1]?.matches[0]?.playerA?.name}">
+            {{championship?.rounds[championship?.rounds?.length-1]?.matches[0]?.playerA?.name}}
+            <span *ngIf="championship?.rounds[championship?.rounds?.length-1]?.matches[0]?.playerA?.name" class="score"
+              [style.color]="championship?.rounds[championship?.rounds?.length-1]?.matches[0]?.totalA>championship?.rounds[championship?.rounds?.length-1]?.matches[0]?.totalB?'#35a461':'gray'">{{championship?.rounds[championship?.rounds?.length-1]?.matches[0]?.totalA}}</span>
+          </li>
+          <li
+            (click)="setResult(championship?.rounds[championship?.rounds?.length-1]?.matches[0], championship?.rounds[championship?.rounds?.length-1], championship)"
+            style="text-align: left" class="team team-bottom"
+            [ngClass]="{lose: championship?.rounds[championship?.rounds?.length-1]?.matches[0]?.winner && championship?.rounds[championship?.rounds?.length-1]?.matches[0]?.winner?.name!=championship?.rounds[championship?.rounds?.length-1]?.matches[0]?.playerB?.name}">
+            {{championship?.rounds[championship?.rounds?.length-1]?.matches[0]?.playerB?.name}}
+            <span *ngIf="championship?.rounds[championship?.rounds?.length-1]?.matches[0]?.playerB?.name" class="score"
+              [style.color]="championship?.rounds[championship?.rounds?.length-1]?.matches[0]?.totalA<championship?.rounds[championship?.rounds?.length-1]?.matches[0]?.totalB?'#35a461':'gray'">{{championship?.rounds[championship?.rounds?.length-1]?.matches[0]?.totalB}}</span>
+          </li>
         </ul>
       </div>
-      <div class="semis-r">
-        <div class="round-details">Right Semifinals <br /><span class="date">Jornada 20</span></div>
+
+      <div class="semis-r" [ngClass]="{current:championship.rounds.length-2==championship?.roundActive}">
+        <div class="round-details">
+          <span contenteditable="true" [textContent]="championship.rounds[championship.rounds.length-2].name"
+            class="notOutlined" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"
+            (input)="championship.rounds[championship?.rounds?.length-2].name=$event.target.textContent"></span><br />
+          <span contenteditable="true" [textContent]="championship.rounds[championship.rounds.length-2].description"
+            class="notOutlined date" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"
+            (input)="championship.rounds[championship.rounds.length-2].description=$event.target.textContent"></span>
+        </div>
         <ul class="matchup championship">
-          <li class="team team-top">&nbsp;<span class="score">&nbsp;</span></li>
-          <li class="team team-bottom">&nbsp;<span class="score">&nbsp;</span></li>
+          <li
+            (click)="setResult(championship?.rounds[championship?.rounds?.length-2]?.matches[1], championship?.rounds[championship?.rounds?.length-2], championship)"
+            style="text-align: left" class="team team-top"
+            [ngClass]="{lose: championship?.rounds[championship?.rounds?.length-2]?.matches[1]?.winner && championship?.rounds[championship?.rounds?.length-2]?.matches[1]?.winner?.name!=championship?.rounds[championship?.rounds?.length-2]?.matches[1]?.playerA?.name}">
+            {{championship?.rounds[championship?.rounds?.length-2]?.matches[1]?.playerA?.name}}
+            <span *ngIf="championship?.rounds[championship?.rounds?.length-2]?.matches[1]?.playerA?.name" class="score"
+              [style.color]="championship?.rounds[championship?.rounds?.length-2]?.matches[1]?.totalA>championship?.rounds[championship?.rounds?.length-2]?.matches[1]?.totalB?'#35a461':'gray'">{{championship?.rounds[championship?.rounds?.length-2]?.matches[1]?.totalA}}</span>
+          </li>
+          <li
+            (click)="setResult(championship?.rounds[championship?.rounds?.length-2]?.matches[1], championship?.rounds[championship?.rounds?.length-2], championship)"
+            style="text-align: left" class="team team-bottom"
+            [ngClass]="{lose: championship?.rounds[championship?.rounds?.length-2]?.matches[1]?.winner && championship?.rounds[championship?.rounds?.length-2]?.matches[1]?.winner?.name!=championship?.rounds[championship?.rounds?.length-2]?.matches[1]?.playerB?.name}">
+            {{championship?.rounds[championship?.rounds?.length-2]?.matches[1]?.playerB?.name}}
+            <span *ngIf="championship?.rounds[championship?.rounds?.length-2]?.matches[1]?.playerB?.name" class="score"
+              [style.color]="championship?.rounds[championship?.rounds?.length-2]?.matches[1]?.totalA<championship?.rounds[championship?.rounds?.length-2]?.matches[1]?.totalB?'#35a461':'gray'">{{championship?.rounds[championship?.rounds?.length-2]?.matches[1]?.totalB}}</span>
+          </li>
         </ul>
       </div>
     </div>
@@ -78,13 +156,15 @@
           [style.paddingBottom.px]="getPadding((championship?.rounds | slice:0:championship?.rounds?.length-2).length-1 - index)"
           *ngFor="let match of round?.matches | slice:(round?.matches?.length/2):round?.matches?.length">
           <li (click)="setResult(match, round, championship)" class="team team-top"
-            [ngClass]="{won: match?.winner==match?.playerA}">
+            [ngClass]="{lose: match?.winner && match?.winner?.name!=match?.playerA?.name}">
             {{match?.playerA?.name}}
-            <span class="score" [style.color]="match?.totalA>match?.totalB?'#35a461':'gray'">{{match?.totalA}}</span>
+            <span *ngIf="match?.playerA?.name" class="score"
+              [style.color]="match?.totalA>match?.totalB?'#35a461':'gray'">{{match?.totalA}}</span>
           </li>
           <li (click)="setResult(match, round, championship)" class="team team-bottom"
-            [ngClass]="{won: match?.winner==match?.playerB}">{{match?.playerB?.name}}
-            <span class="score" [style.color]="match?.totalA<match?.totalB?'#35a461':'gray'">{{match?.totalB}}</span>
+            [ngClass]="{lose: match?.winner && match?.winner?.name!=match?.playerB?.name}">{{match?.playerB?.name}}
+            <span *ngIf="match?.playerB?.name" class="score"
+              [style.color]="match?.totalA<match?.totalB?'#35a461':'gray'">{{match?.totalB}}</span>
           </li>
         </ul>
       </div>
@@ -94,21 +174,24 @@
 <section class="share">
   <div class="share-wrap">
     <a class="share-icon" href="https://github.com/MiguelRozalen/" target="_new"><i class="fa fa-github"></i></a>
+    <a class="share-icon" href="https://twitter.com/mklr93" target="_new"><i class="fa fa-twitter"></i></a>
+    <a class="share-icon" href="https://www.linkedin.com/in/miguel-a-rozalen-soriano-560408126/" target="_new"><i
+        class="fa fa-linkedin"></i></a>
   </div>
 </section>
 
-<button matTooltip="Load Championship" style="position: fixed; bottom: 125px; right: 15px; background-color: #5cca87;"
-  mat-mini-fab color="accent">
-  <mat-icon class="floating-button-icon">save</mat-icon>
+<button matTooltip="Load Championship" (click)="uploader.click()"
+  style="position: fixed; bottom: 125px; right: 15px; background-color: #5cca87;" mat-mini-fab color="accent">
+  <mat-icon class="floating-button-icon">folder</mat-icon>
 </button>
 
 <button matTooltip="Save Championship" (click)="saveChampionship()"
   style="position: fixed; bottom: 70px; right: 15px; background-color: #5cca87;" mat-mini-fab color="accent">
-  <mat-icon class="floating-button-icon">save_alt</mat-icon>
+  <mat-icon class="floating-button-icon">save</mat-icon>
 </button>
 
 
 <button matTooltip="New Championship" style="position: fixed; bottom: 15px; right: 15px; background-color: #5cca87;"
-  mat-mini-fab color="accent">
+  mat-mini-fab color="accent"  (click)="newChampionship()">
   <mat-icon class="floating-button-icon">add</mat-icon>
 </button>
