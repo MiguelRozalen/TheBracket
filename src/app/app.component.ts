@@ -133,8 +133,8 @@ export class AppComponent {
       var reader = new FileReader();
       reader.readAsText(file);
       reader.onload = (evt) => {
-        var gZipJson = LZString.decompressFromUTF16(evt.target.result)
-        this.championship = JSON.parse(gZipJson)
+        //var gZipJson = LZString.decompressFromUTF16(evt.target.result)
+        this.championship = JSON.parse(evt.target.result.toString())
       }
       reader.onerror = function (evt) {
         console.log(evt)
@@ -144,9 +144,9 @@ export class AppComponent {
 
   saveChampionship() {
     var sJson = JSON.stringify(this.championship)
-    var gZipJson = LZString.compressToUTF16(sJson)
+    //var gZipJson = LZString.compressToUTF16(sJson)
     var element = document.createElement('a');
-    element.setAttribute('href', "data:text/json;charset=UTF-8," + encodeURIComponent(gZipJson));
+    element.setAttribute('href', "data:text/json;charset=UTF-8," + encodeURIComponent(sJson));
     element.setAttribute('download', "The Bracket: " + this.championship.name + ".bracket");
     element.style.display = 'none';
     document.body.appendChild(element);
