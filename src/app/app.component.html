@@ -91,6 +91,7 @@
             style="text-align: left" class="team team-top"
             [ngClass]="{lose: championship?.rounds[championship?.rounds?.length-2]?.matches[0]?.winner && championship?.rounds[championship?.rounds?.length-2]?.matches[0]?.winner?.name!=championship?.rounds[championship?.rounds?.length-2]?.matches[0]?.playerA?.name}">
             {{championship?.rounds[championship?.rounds?.length-2]?.matches[0]?.playerA?.name}}
+            
             <span *ngIf="championship?.rounds[championship?.rounds?.length-2]?.matches[0]?.playerA?.name" class="score"
               [style.color]="championship?.rounds[championship?.rounds?.length-2]?.matches[0]?.totalA>championship?.rounds[championship?.rounds?.length-2]?.matches[0]?.totalB?'#35a461':'gray'">{{championship?.rounds[championship?.rounds?.length-2]?.matches[0]?.totalA}}</span>
           </li>
@@ -178,11 +179,34 @@
           <li (click)="setResult(match, round, championship)" class="team team-top"
             [ngClass]="{lose: match?.winner && match?.winner?.name!=match?.playerA?.name}">
             {{match?.playerA?.name}}
+
+            <input matInput type="text" placeholder="-" class="resultPlaceHolder  last"
+            [(ngModel)]="match?.resultA[2]"
+            [style.color]="match?.resultB[2]<match?.resultA[0]?'#ff3300':'#ffe6ff'"> 
+            <input matInput type="text" placeholder="-" class="resultPlaceHolder"
+            [(ngModel)]="match?.resultA[1]"
+            [style.color]="match?.resultB[1]<match?.resultA[1]?'#ff3300':'#ffe6ff'"> 
+            <input matInput type="text" placeholder="-" class="resultPlaceHolder"
+            [(ngModel)]="match?.resultA[0]"
+            [style.color]="match?.resultB[0]<match?.resultA[0]?'#ff3300':'#ffe6ff'"> 
+
             <span *ngIf="match?.playerA?.name" class="score"
               [style.color]="match?.totalA>match?.totalB?'#35a461':'gray'">{{match?.totalA}}</span>
           </li>
           <li (click)="setResult(match, round, championship)" class="team team-bottom"
             [ngClass]="{lose: match?.winner && match?.winner?.name!=match?.playerB?.name}">{{match?.playerB?.name}}
+
+            <input matInput type="text" placeholder="-" class="resultPlaceHolder  last"
+            [(ngModel)]="match?.resultB[2]"
+            [style.color]="match?.resultA[2]<match?.resultB[0]?'#ff3300':'#ffe6ff'"> 
+            <input matInput type="text" placeholder="-" class="resultPlaceHolder"
+            [(ngModel)]="match?.resultB[1]"
+            [style.color]="match?.resultA[1]<match?.resultB[1]?'#ff3300':'#ffe6ff'"> 
+            <input matInput type="text" placeholder="-" class="resultPlaceHolder"
+            [(ngModel)]="match?.resultB[0]"
+            [style.color]="match?.resultA[0]<match?.resultB[0]?'#ff3300':'#ffe6ff'"> 
+
+
             <span *ngIf="match?.playerB?.name" class="score"
               [style.color]="match?.totalA<match?.totalB?'#35a461':'gray'">{{match?.totalB}}</span>
           </li>
