@@ -124,6 +124,18 @@
   width: 95%;
   width: 30.8333%\9;
 }
+
+.result {
+  display: block;
+  float: left;
+  display: -webkit-box;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-flex-direction: row;
+  flex-direction: row;
+}
 // .split-two {
 // }
 .split-one .round {
@@ -151,8 +163,26 @@
   right: 5px;
 }
 
+.resultPlaceHolder {
+  float: right;
+  font-size: 11px;
+  width: 12px;
+  color: rgb(201, 200, 200);
+  background-color: rgb(49, 49, 49);
+  text-align: center;
+  margin: 0px;
+  padding: 2px;
+  margin-right: 5px;
+  height: 25px;
+  border: 0px;
+}
+
+.last {
+  margin-right: 15px;
+}
+
 .team {
-  padding: 0 5px;
+  padding: 0px;
   margin: 3px 0;
   height: 25px;
   line-height: 25px;
@@ -161,6 +191,8 @@
   position: relative;
   cursor: pointer;
 }
+
+
 .round-two .matchup {
   margin: 0;
   height: 60px;
@@ -174,7 +206,7 @@
 .round-details {
   font-family: "Roboto Condensed", sans-serif;
   font-size: 13px;
-  color: #35a461;
+  color: #f33737;
   text-transform: uppercase;
   text-align: center;
   height: 40px;
