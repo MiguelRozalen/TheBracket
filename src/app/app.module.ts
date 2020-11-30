@@ -14,12 +14,14 @@ import { NewDialogComponent } from './new-dialog/new-dialog.component';
 import { MatStepperModule } from '@angular/material/stepper';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
+import { TruncatePipe } from './TruncatePipe';
 
 @NgModule({
   declarations: [
     AppComponent,
     ResultDialogComponent,
-    NewDialogComponent
+    NewDialogComponent,
+    TruncatePipe
   ],
   imports: [
     BrowserModule,

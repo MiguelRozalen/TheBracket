@@ -10,6 +10,8 @@ import SindromeDeDownCup from '../assets/The Bracket_ Sindrome de Down_R1_P1.jso
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
+
+
 export class AppComponent {
 
   public numberOfRounds: number

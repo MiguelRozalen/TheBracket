@@ -42,7 +42,7 @@
           *ngFor="let match of round?.matches | slice:0:(round?.matches?.length/2)">
           <li (click)="setResult(match, round, championship)" class="team team-top"
             [ngClass]="{lose: match?.winner && match?.winner?.name!=match?.playerA?.name}">
-            {{match?.playerA?.name}}
+            {{match?.playerA?.name | slice:0:6}}
 
             <input matInput type="text" placeholder="-"  *ngFor="let resultPlayerA of match?.resultA; let i = index; let l = count"
             [ngClass]="i == 0 ? 'resultPlaceHolder  last' : 'resultPlaceHolder'"
@@ -53,7 +53,7 @@
               [style.color]="match?.totalA>match?.totalB?'#35a461':'gray'">{{match?.totalA}}</span>
           </li>
           <li (click)="setResult(match, round, championship)" class="team team-bottom"
-            [ngClass]="{lose: match?.winner && match?.winner?.name!=match?.playerB?.name}">{{match?.playerB?.name}}
+            [ngClass]="{lose: match?.winner && match?.winner?.name!=match?.playerB?.name}">{{match?.playerB?.name | slice:0:6}}
 
             <input matInput type="text" placeholder="-"  *ngFor="let resultPlayerA of match?.resultA; let i = index; let l = count"
             [ngClass]="i == 0 ? 'resultPlaceHolder  last' : 'resultPlaceHolder'"
@@ -82,7 +82,7 @@
             (click)="setResult(championship?.rounds[championship?.rounds?.length-2]?.matches[0], championship?.rounds[championship?.rounds?.length-2], championship)"
             style="text-align: left" class="team team-top"
             [ngClass]="{lose: championship?.rounds[championship?.rounds?.length-2]?.matches[0]?.winner && championship?.rounds[championship?.rounds?.length-2]?.matches[0]?.winner?.name!=championship?.rounds[championship?.rounds?.length-2]?.matches[0]?.playerA?.name}">
-            {{championship?.rounds[championship?.rounds?.length-2]?.matches[0]?.playerA?.name}}
+            {{championship?.rounds[championship?.rounds?.length-2]?.matches[0]?.playerA?.name | slice:0:6}}
 
             <input matInput type="text" placeholder="-"  *ngFor="let resultPlayerA of championship?.rounds[championship?.rounds?.length-2]?.matches[0]?.resultA; let i = index; let l = count"
             [ngClass]="i == 0 ? 'resultPlaceHolder  last' : 'resultPlaceHolder'"
@@ -96,7 +96,7 @@
             (click)="setResult(championship?.rounds[championship?.rounds?.length-2]?.matches[0], championship?.rounds[championship?.rounds?.length-2], championship)"
             style="text-align: left" class="team team-bottom"
             [ngClass]="{lose: championship?.rounds[championship?.rounds?.length-2]?.matches[0]?.winner && championship?.rounds[championship?.rounds?.length-2]?.matches[0]?.winner?.name!=championship?.rounds[championship?.rounds?.length-2]?.matches[0]?.playerB?.name}">
-            {{championship?.rounds[championship?.rounds?.length-2]?.matches[0]?.playerB?.name}}
+            {{championship?.rounds[championship?.rounds?.length-2]?.matches[0]?.playerB?.name | slice:0:6}}
 
             <input matInput type="text" placeholder="-"  *ngFor="let resultPlayerA of championship?.rounds[championship?.rounds?.length-2]?.matches[0]?.resultA; let i = index; let l = count"
             [ngClass]="i == 0 ? 'resultPlaceHolder  last' : 'resultPlaceHolder'"
@@ -125,7 +125,7 @@
             (click)="setResult(championship?.rounds[championship?.rounds?.length-1]?.matches[0], championship?.rounds[championship?.rounds?.length-1], championship)"
             style="text-align: left" class="team team-top"
             [ngClass]="{lose: championship?.rounds[championship?.rounds?.length-1]?.matches[0]?.winner && championship?.rounds[championship?.rounds?.length-1]?.matches[0]?.winner?.name!=championship?.rounds[championship?.rounds?.length-1]?.matches[0]?.playerA?.name}">
-            {{championship?.rounds[championship?.rounds?.length-1]?.matches[0]?.playerA?.name}}
+            {{championship?.rounds[championship?.rounds?.length-1]?.matches[0]?.playerA?.name | slice:0:6}}
 
             <input matInput type="text" placeholder="-"  *ngFor="let resultPlayerA of championship?.rounds[championship?.rounds?.length-2]?.matches[0]?.resultA; let i = index; let l = count"
             [ngClass]="i == 0 ? 'resultPlaceHolder  last' : 'resultPlaceHolder'"
@@ -140,7 +140,7 @@
             (click)="setResult(championship?.rounds[championship?.rounds?.length-1]?.matches[0], championship?.rounds[championship?.rounds?.length-1], championship)"
             style="text-align: left" class="team team-bottom"
             [ngClass]="{lose: championship?.rounds[championship?.rounds?.length-1]?.matches[0]?.winner && championship?.rounds[championship?.rounds?.length-1]?.matches[0]?.winner?.name!=championship?.rounds[championship?.rounds?.length-1]?.matches[0]?.playerB?.name}">
-            {{championship?.rounds[championship?.rounds?.length-1]?.matches[0]?.playerB?.name}}
+            {{championship?.rounds[championship?.rounds?.length-1]?.matches[0]?.playerB?.name | slice:0:6}}
 
             <input matInput type="text" placeholder="-"  *ngFor="let resultPlayerA of championship?.rounds[championship?.rounds?.length-2]?.matches[0]?.resultA; let i = index; let l = count"
             [ngClass]="i == 0 ? 'resultPlaceHolder  last' : 'resultPlaceHolder'"
@@ -168,7 +168,7 @@
             (click)="setResult(championship?.rounds[championship?.rounds?.length-2]?.matches[1], championship?.rounds[championship?.rounds?.length-2], championship)"
             style="text-align: left" class="team team-top"
             [ngClass]="{lose: championship?.rounds[championship?.rounds?.length-2]?.matches[1]?.winner && championship?.rounds[championship?.rounds?.length-2]?.matches[1]?.winner?.name!=championship?.rounds[championship?.rounds?.length-2]?.matches[1]?.playerA?.name}">
-            {{championship?.rounds[championship?.rounds?.length-2]?.matches[1]?.playerA?.name}}
+            {{championship?.rounds[championship?.rounds?.length-2]?.matches[1]?.playerA?.name | slice:0:6}}
 
             <input matInput type="text" placeholder="-"  *ngFor="let resultPlayerA of championship?.rounds[championship?.rounds?.length-2]?.matches[0]?.resultA; let i = index; let l = count"
             [ngClass]="i == 0 ? 'resultPlaceHolder  last' : 'resultPlaceHolder'"
@@ -182,7 +182,7 @@
             (click)="setResult(championship?.rounds[championship?.rounds?.length-2]?.matches[1], championship?.rounds[championship?.rounds?.length-2], championship)"
             style="text-align: left" class="team team-bottom"
             [ngClass]="{lose: championship?.rounds[championship?.rounds?.length-2]?.matches[1]?.winner && championship?.rounds[championship?.rounds?.length-2]?.matches[1]?.winner?.name!=championship?.rounds[championship?.rounds?.length-2]?.matches[1]?.playerB?.name}">
-            {{championship?.rounds[championship?.rounds?.length-2]?.matches[1]?.playerB?.name}}
+            {{championship?.rounds[championship?.rounds?.length-2]?.matches[1]?.playerB?.name | slice:0:6}}
 
             <input matInput type="text" placeholder="-"  *ngFor="let resultPlayerA of championship?.rounds[championship?.rounds?.length-2]?.matches[0]?.resultA; let i = index; let l = count"
             [ngClass]="i == 0 ? 'resultPlaceHolder  last' : 'resultPlaceHolder'"
@@ -208,7 +208,7 @@
           *ngFor="let match of round?.matches | slice:(round?.matches?.length/2):round?.matches?.length">
           <li (click)="setResult(match, round, championship)" class="team team-top"
             [ngClass]="{lose: match?.winner && match?.winner?.name!=match?.playerA?.name}">
-            {{match?.playerA?.name}}
+            {{match?.playerA?.name | slice:0:6}}
 
             <input matInput type="text" placeholder="-"  *ngFor="let resultPlayerA of match?.resultA; let i = index; let l = count"
             [ngClass]="i == 0 ? 'resultPlaceHolder  last' : 'resultPlaceHolder'"
