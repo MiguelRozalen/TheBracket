@@ -3,6 +3,7 @@ import { ResultDialogComponent } from './result-dialog/result-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
 import { NewDialogComponent } from './new-dialog/new-dialog.component';
 import { shuffle, LZString } from './app.utils';
+import SindromeDeDownCup from '../assets/The Bracket_ Sindrome de Down_R1_P1.json';
 
 @Component({
   selector: 'app-root',
@@ -125,6 +126,9 @@ export class AppComponent {
         matches: matches
       })
     }
+
+    this.championship = JSON.parse(JSON.stringify(SindromeDeDownCup));
+     
   }
 
   loadChampionship($event: any) {
