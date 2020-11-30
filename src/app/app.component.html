@@ -43,30 +43,22 @@
           <li (click)="setResult(match, round, championship)" class="team team-top"
             [ngClass]="{lose: match?.winner && match?.winner?.name!=match?.playerA?.name}">
             {{match?.playerA?.name}}
-            <input matInput type="text" placeholder="-" class="resultPlaceHolder  last"
-            [(ngModel)]="match?.resultA[2]"
-            [style.color]="match?.resultB[2]<match?.resultA[0]?'#ff3300':'#ffe6ff'"> 
-            <input matInput type="text" placeholder="-" class="resultPlaceHolder"
-            [(ngModel)]="match?.resultA[1]"
-            [style.color]="match?.resultB[1]<match?.resultA[1]?'#ff3300':'#ffe6ff'"> 
-            <input matInput type="text" placeholder="-" class="resultPlaceHolder"
-            [(ngModel)]="match?.resultA[0]"
-            [style.color]="match?.resultB[0]<match?.resultA[0]?'#ff3300':'#ffe6ff'"> 
+
+            <input matInput type="text" placeholder="-"  *ngFor="let resultPlayerA of match?.resultA; let i = index; let l = count"
+            [ngClass]="i == 0 ? 'resultPlaceHolder  last' : 'resultPlaceHolder'"
+            [(ngModel)]="match?.resultA[(l - 1) - i]"
+            [style.color]="match?.resultB[(l - 1) - i]<match?.resultA[(l - 1) - i]?'#ff3300':'#ffe6ff'">
+
             <span *ngIf="match?.playerA?.name" class="score"
               [style.color]="match?.totalA>match?.totalB?'#35a461':'gray'">{{match?.totalA}}</span>
           </li>
           <li (click)="setResult(match, round, championship)" class="team team-bottom"
             [ngClass]="{lose: match?.winner && match?.winner?.name!=match?.playerB?.name}">{{match?.playerB?.name}}
 
-            <input matInput type="text" placeholder="-" class="resultPlaceHolder  last"
-            [(ngModel)]="match?.resultB[2]"
-            [style.color]="match?.resultA[2]<match?.resultB[0]?'#ff3300':'#ffe6ff'"> 
-            <input matInput type="text" placeholder="-" class="resultPlaceHolder"
-            [(ngModel)]="match?.resultB[1]"
-            [style.color]="match?.resultA[1]<match?.resultB[1]?'#ff3300':'#ffe6ff'"> 
-            <input matInput type="text" placeholder="-" class="resultPlaceHolder"
-            [(ngModel)]="match?.resultB[0]"
-            [style.color]="match?.resultA[0]<match?.resultB[0]?'#ff3300':'#ffe6ff'"> 
+            <input matInput type="text" placeholder="-"  *ngFor="let resultPlayerA of match?.resultA; let i = index; let l = count"
+            [ngClass]="i == 0 ? 'resultPlaceHolder  last' : 'resultPlaceHolder'"
+            [(ngModel)]="match?.resultB[(l - 1) - i]"
+            [style.color]="match?.resultA[(l - 1) - i]<match?.resultB[(l - 1) - i]?'#ff3300':'#ffe6ff'">
 
             <span *ngIf="match?.playerB?.name" class="score"
               [style.color]="match?.totalA<match?.totalB?'#35a461':'gray'">{{match?.totalB}}</span>
@@ -91,7 +83,12 @@
             style="text-align: left" class="team team-top"
             [ngClass]="{lose: championship?.rounds[championship?.rounds?.length-2]?.matches[0]?.winner && championship?.rounds[championship?.rounds?.length-2]?.matches[0]?.winner?.name!=championship?.rounds[championship?.rounds?.length-2]?.matches[0]?.playerA?.name}">
             {{championship?.rounds[championship?.rounds?.length-2]?.matches[0]?.playerA?.name}}
-            
+
+            <input matInput type="text" placeholder="-"  *ngFor="let resultPlayerA of championship?.rounds[championship?.rounds?.length-2]?.matches[0]?.resultA; let i = index; let l = count"
+            [ngClass]="i == 0 ? 'resultPlaceHolder  last' : 'resultPlaceHolder'"
+            [(ngModel)]="championship?.rounds[championship?.rounds?.length-2]?.matches[0]?.resultA[(l - 1) - i]"
+            [style.color]="championship?.rounds[championship?.rounds?.length-2]?.matches[0]?.resultA[(l - 1) - i]<championship?.rounds[championship?.rounds?.length-2]?.matches[0]?.resultB[(l - 1) - i]?'#ff3300':'#ffe6ff'">
+
             <span *ngIf="championship?.rounds[championship?.rounds?.length-2]?.matches[0]?.playerA?.name" class="score"
               [style.color]="championship?.rounds[championship?.rounds?.length-2]?.matches[0]?.totalA>championship?.rounds[championship?.rounds?.length-2]?.matches[0]?.totalB?'#35a461':'gray'">{{championship?.rounds[championship?.rounds?.length-2]?.matches[0]?.totalA}}</span>
           </li>
@@ -100,6 +97,12 @@
             style="text-align: left" class="team team-bottom"
             [ngClass]="{lose: championship?.rounds[championship?.rounds?.length-2]?.matches[0]?.winner && championship?.rounds[championship?.rounds?.length-2]?.matches[0]?.winner?.name!=championship?.rounds[championship?.rounds?.length-2]?.matches[0]?.playerB?.name}">
             {{championship?.rounds[championship?.rounds?.length-2]?.matches[0]?.playerB?.name}}
+
+            <input matInput type="text" placeholder="-"  *ngFor="let resultPlayerA of championship?.rounds[championship?.rounds?.length-2]?.matches[0]?.resultA; let i = index; let l = count"
+            [ngClass]="i == 0 ? 'resultPlaceHolder  last' : 'resultPlaceHolder'"
+            [(ngModel)]="championship?.rounds[championship?.rounds?.length-2]?.matches[0]?.resultB[(l - 1) - i]"
+            [style.color]="championship?.rounds[championship?.rounds?.length-2]?.matches[0]?.resultB[(l - 1) - i]<championship?.rounds[championship?.rounds?.length-2]?.matches[0]?.resultA[(l - 1) - i]?'#ff3300':'#ffe6ff'">
+
             <span *ngIf="championship?.rounds[championship?.rounds?.length-2]?.matches[0]?.playerB?.name" class="score"
               [style.color]="championship?.rounds[championship?.rounds?.length-2]?.matches[0]?.totalA<championship?.rounds[championship?.rounds?.length-2]?.matches[0]?.totalB?'#35a461':'gray'">{{championship?.rounds[championship?.rounds?.length-2]?.matches[0]?.totalB}}</span>
           </li>
@@ -123,6 +126,13 @@
             style="text-align: left" class="team team-top"
             [ngClass]="{lose: championship?.rounds[championship?.rounds?.length-1]?.matches[0]?.winner && championship?.rounds[championship?.rounds?.length-1]?.matches[0]?.winner?.name!=championship?.rounds[championship?.rounds?.length-1]?.matches[0]?.playerA?.name}">
             {{championship?.rounds[championship?.rounds?.length-1]?.matches[0]?.playerA?.name}}
+
+            <input matInput type="text" placeholder="-"  *ngFor="let resultPlayerA of championship?.rounds[championship?.rounds?.length-2]?.matches[0]?.resultA; let i = index; let l = count"
+            [ngClass]="i == 0 ? 'resultPlaceHolder  last' : 'resultPlaceHolder'"
+            [(ngModel)]="championship?.rounds[championship?.rounds?.length-1]?.matches[0]?.resultA[(l - 1) - i]"
+            [style.color]="championship?.rounds[championship?.rounds?.length-1]?.matches[0]?.resultA[(l - 1) - i]<championship?.rounds[championship?.rounds?.length-1]?.matches[0]?.resultB[(l - 1) - i]?'#ff3300':'#ffe6ff'">
+
+          
             <span *ngIf="championship?.rounds[championship?.rounds?.length-1]?.matches[0]?.playerA?.name" class="score"
               [style.color]="championship?.rounds[championship?.rounds?.length-1]?.matches[0]?.totalA>championship?.rounds[championship?.rounds?.length-1]?.matches[0]?.totalB?'#35a461':'gray'">{{championship?.rounds[championship?.rounds?.length-1]?.matches[0]?.totalA}}</span>
           </li>
@@ -131,6 +141,13 @@
             style="text-align: left" class="team team-bottom"
             [ngClass]="{lose: championship?.rounds[championship?.rounds?.length-1]?.matches[0]?.winner && championship?.rounds[championship?.rounds?.length-1]?.matches[0]?.winner?.name!=championship?.rounds[championship?.rounds?.length-1]?.matches[0]?.playerB?.name}">
             {{championship?.rounds[championship?.rounds?.length-1]?.matches[0]?.playerB?.name}}
+
+            <input matInput type="text" placeholder="-"  *ngFor="let resultPlayerA of championship?.rounds[championship?.rounds?.length-2]?.matches[0]?.resultA; let i = index; let l = count"
+            [ngClass]="i == 0 ? 'resultPlaceHolder  last' : 'resultPlaceHolder'"
+            [(ngModel)]="championship?.rounds[championship?.rounds?.length-1]?.matches[0]?.resultB[(l - 1) - i]"
+            [style.color]="championship?.rounds[championship?.rounds?.length-1]?.matches[0]?.resultB[(l - 1) - i]<championship?.rounds[championship?.rounds?.length-1]?.matches[0]?.resultA[(l - 1) - i]?'#ff3300':'#ffe6ff'">
+
+
             <span *ngIf="championship?.rounds[championship?.rounds?.length-1]?.matches[0]?.playerB?.name" class="score"
               [style.color]="championship?.rounds[championship?.rounds?.length-1]?.matches[0]?.totalA<championship?.rounds[championship?.rounds?.length-1]?.matches[0]?.totalB?'#35a461':'gray'">{{championship?.rounds[championship?.rounds?.length-1]?.matches[0]?.totalB}}</span>
           </li>
@@ -152,6 +169,12 @@
             style="text-align: left" class="team team-top"
             [ngClass]="{lose: championship?.rounds[championship?.rounds?.length-2]?.matches[1]?.winner && championship?.rounds[championship?.rounds?.length-2]?.matches[1]?.winner?.name!=championship?.rounds[championship?.rounds?.length-2]?.matches[1]?.playerA?.name}">
             {{championship?.rounds[championship?.rounds?.length-2]?.matches[1]?.playerA?.name}}
+
+            <input matInput type="text" placeholder="-"  *ngFor="let resultPlayerA of championship?.rounds[championship?.rounds?.length-2]?.matches[0]?.resultA; let i = index; let l = count"
+            [ngClass]="i == 0 ? 'resultPlaceHolder  last' : 'resultPlaceHolder'"
+            [(ngModel)]="championship?.rounds[championship?.rounds?.length-2]?.matches[1]?.resultA[(l - 1) - i]"
+            [style.color]="championship?.rounds[championship?.rounds?.length-2]?.matches[1]?.resultA[(l - 1) - i]<championship?.rounds[championship?.rounds?.length-2]?.matches[1]?.resultB[(l - 1) - i]?'#ff3300':'#ffe6ff'">
+
             <span *ngIf="championship?.rounds[championship?.rounds?.length-2]?.matches[1]?.playerA?.name" class="score"
               [style.color]="championship?.rounds[championship?.rounds?.length-2]?.matches[1]?.totalA>championship?.rounds[championship?.rounds?.length-2]?.matches[1]?.totalB?'#35a461':'gray'">{{championship?.rounds[championship?.rounds?.length-2]?.matches[1]?.totalA}}</span>
           </li>
@@ -160,6 +183,13 @@
             style="text-align: left" class="team team-bottom"
             [ngClass]="{lose: championship?.rounds[championship?.rounds?.length-2]?.matches[1]?.winner && championship?.rounds[championship?.rounds?.length-2]?.matches[1]?.winner?.name!=championship?.rounds[championship?.rounds?.length-2]?.matches[1]?.playerB?.name}">
             {{championship?.rounds[championship?.rounds?.length-2]?.matches[1]?.playerB?.name}}
+
+            <input matInput type="text" placeholder="-"  *ngFor="let resultPlayerA of championship?.rounds[championship?.rounds?.length-2]?.matches[0]?.resultA; let i = index; let l = count"
+            [ngClass]="i == 0 ? 'resultPlaceHolder  last' : 'resultPlaceHolder'"
+            [(ngModel)]="championship?.rounds[championship?.rounds?.length-2]?.matches[1]?.resultB[(l - 1) - i]"
+            [style.color]="championship?.rounds[championship?.rounds?.length-2]?.matches[1]?.resultB[(l - 1) - i]<championship?.rounds[championship?.rounds?.length-2]?.matches[1]?.resultA[(l - 1) - i]?'#ff3300':'#ffe6ff'">
+
+
             <span *ngIf="championship?.rounds[championship?.rounds?.length-2]?.matches[1]?.playerB?.name" class="score"
               [style.color]="championship?.rounds[championship?.rounds?.length-2]?.matches[1]?.totalA<championship?.rounds[championship?.rounds?.length-2]?.matches[1]?.totalB?'#35a461':'gray'">{{championship?.rounds[championship?.rounds?.length-2]?.matches[1]?.totalB}}</span>
           </li>
@@ -180,15 +210,10 @@
             [ngClass]="{lose: match?.winner && match?.winner?.name!=match?.playerA?.name}">
             {{match?.playerA?.name}}
 
-            <input matInput type="text" placeholder="-" class="resultPlaceHolder  last"
-            [(ngModel)]="match?.resultA[2]"
-            [style.color]="match?.resultB[2]<match?.resultA[0]?'#ff3300':'#ffe6ff'"> 
-            <input matInput type="text" placeholder="-" class="resultPlaceHolder"
-            [(ngModel)]="match?.resultA[1]"
-            [style.color]="match?.resultB[1]<match?.resultA[1]?'#ff3300':'#ffe6ff'"> 
-            <input matInput type="text" placeholder="-" class="resultPlaceHolder"
-            [(ngModel)]="match?.resultA[0]"
-            [style.color]="match?.resultB[0]<match?.resultA[0]?'#ff3300':'#ffe6ff'"> 
+            <input matInput type="text" placeholder="-"  *ngFor="let resultPlayerA of match?.resultA; let i = index; let l = count"
+            [ngClass]="i == 0 ? 'resultPlaceHolder  last' : 'resultPlaceHolder'"
+            [(ngModel)]="match?.resultA[(l - 1) - i]"
+            [style.color]="match?.resultA[(l - 1) - i]<match?.resultB[(l - 1) - i]?'#ff3300':'#ffe6ff'">
 
             <span *ngIf="match?.playerA?.name" class="score"
               [style.color]="match?.totalA>match?.totalB?'#35a461':'gray'">{{match?.totalA}}</span>
@@ -196,15 +221,10 @@
           <li (click)="setResult(match, round, championship)" class="team team-bottom"
             [ngClass]="{lose: match?.winner && match?.winner?.name!=match?.playerB?.name}">{{match?.playerB?.name}}
 
-            <input matInput type="text" placeholder="-" class="resultPlaceHolder  last"
-            [(ngModel)]="match?.resultB[2]"
-            [style.color]="match?.resultA[2]<match?.resultB[0]?'#ff3300':'#ffe6ff'"> 
-            <input matInput type="text" placeholder="-" class="resultPlaceHolder"
-            [(ngModel)]="match?.resultB[1]"
-            [style.color]="match?.resultA[1]<match?.resultB[1]?'#ff3300':'#ffe6ff'"> 
-            <input matInput type="text" placeholder="-" class="resultPlaceHolder"
-            [(ngModel)]="match?.resultB[0]"
-            [style.color]="match?.resultA[0]<match?.resultB[0]?'#ff3300':'#ffe6ff'"> 
+            <input matInput type="text" placeholder="-"  *ngFor="let resultPlayerA of match?.resultA; let i = index; let l = count"
+            [ngClass]="i == 0 ? 'resultPlaceHolder  last' : 'resultPlaceHolder'"
+            [(ngModel)]="match?.resultB[(l - 1) - i]"
+            [style.color]="match?.resultB[(l - 1) - i]<match?.resultA[(l - 1) - i]?'#ff3300':'#ffe6ff'">
 
 
             <span *ngIf="match?.playerB?.name" class="score"
