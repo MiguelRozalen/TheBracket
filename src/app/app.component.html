@@ -213,7 +213,7 @@
             <input matInput type="text" placeholder="-"  *ngFor="let resultPlayerA of match?.resultA; let i = index; let l = count"
             [ngClass]="i == 0 ? 'resultPlaceHolder  last' : 'resultPlaceHolder'"
             [(ngModel)]="match?.resultA[(l - 1) - i]"
-            [style.color]="match?.resultA[(l - 1) - i]<match?.resultB[(l - 1) - i]?'#ff3300':'#ffe6ff'">
+            [style.color]="match?.resultA[(l - 1) - i]>match?.resultB[(l - 1) - i]?'#ff3300':'#ffe6ff'">
 
             <span *ngIf="match?.playerA?.name" class="score"
               [style.color]="match?.totalA>match?.totalB?'#35a461':'gray'">{{match?.totalA}}</span>
@@ -224,7 +224,7 @@
             <input matInput type="text" placeholder="-"  *ngFor="let resultPlayerA of match?.resultA; let i = index; let l = count"
             [ngClass]="i == 0 ? 'resultPlaceHolder  last' : 'resultPlaceHolder'"
             [(ngModel)]="match?.resultB[(l - 1) - i]"
-            [style.color]="match?.resultB[(l - 1) - i]<match?.resultA[(l - 1) - i]?'#ff3300':'#ffe6ff'">
+            [style.color]="match?.resultB[(l - 1) - i]>match?.resultA[(l - 1) - i]?'#ff3300':'#ffe6ff'">
 
 
             <span *ngIf="match?.playerB?.name" class="score"
