@@ -20,7 +20,7 @@ export class NewDialogComponent implements OnInit {
     this.data.players = []
     while (this.data.players.length < this.numberOfPlayers) {
       this.data.players.push({
-        name: "Player " + (this.data.players.length+1)
+        name: "P " + (this.data.players.length+1)
       })
     }
   }

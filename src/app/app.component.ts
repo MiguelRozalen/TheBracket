@@ -5,6 +5,9 @@ import { MatDialog } from '@angular/material/dialog';
 import { NewDialogComponent } from './new-dialog/new-dialog.component';
 import { shuffle, LZString } from './app.utils';
 import SindromeDeDownCup from '../assets/The Bracket_ Sindrome de Down_R1_P1.json';
+import ParalisisCup from '../assets/ParalisisCup_Last.json';
+import { ActivatedRoute } from '@angular/router';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-root',
@@ -31,7 +34,7 @@ export class AppComponent {
     { name: "N. Djokovic" }, { name: "H. Hurkacz" }, { name: "H. Laaksonen" }, { name: "P. Martínez" }, { name: "J. Munar" }, { name: "S. Caruso" }, { name: "S. Stakhovsky" }, { name: "G. Simon" }, { name: "D. Shapovalov" }, { name: "J-L. Struff" }, { name: "R. Albot" }, { name: "T. Sandgren" }, { name: "L. Harris" }, { name: "L. Rosol" }, { name: "A. Bedene" }, { name: "B. Ćorić" }, { name: "F. Fognini" }, { name: "A. Seppi" }, { name: "G. García López" }, { name: "F. Delbonis" }, { name: "T. Fritz" }, { name: "B. Tomic" }, { name: "S. Johnson" }, { name: "R. Bautista" }, { name: "D. Lajović" }, { name: "T. Monteiro" }, { name: "C. Norrie" }, { name: "E. Benchetrit" }, { name: "M. Ymer" }, { name: "B. Rola" }, { name: "J. Millman" }, { name: "A. Zverev" }, { name: "D. Thiem" }, { name: "T. Paul" }, { name: "R. Molleker" }, { name: "A. Búblik" }, { name: "M. Janvier" }, { name: "P. Cuevas" }, { name: "J. Chardy" }, { name: "K. Edmund" }, { name: "F. Verdasco" }, { name: "D. Evans" }, { name: "A. Hoang" }, { name: "D. Džumhur" }, { name: "S. Travaglia" }, { name: "A. Mannarino" }, { name: "T. Daniel" }, { name: "G. Monfils" }, { name: "K. Khachanov" }, { name: "C-M. Stebe" }, { name: "G. Barrère" }, { name: "M. Ebden" }, { name: "M. Kližan" }, { name: "M. Kukushkin" }, { name: "S. Bolelli" }, { name: "L. Pouille" }, { name: "A. Davidovich" }, { name: "J. Thompson" }, { name: "I. Karlović" }, { name: "F. López" }, { name: "Y. Nishioka" }, { name: "M. McDonald" }, { name: "N. Jarry" }, { name: "J.M. del Potro" }, { name: "S. Tsitsipas" }, { name: "M. Marterer" }, { name: "P. Gunneswaran" }, { name: "H. Dellien" }, { name: "R. Carballés" }, { name: "A. Muller" }, { name: "F. Krajinović" }, { name: "F. Tiafoe" }, { name: "S. Wawrinka" }, { name: "J. Kovalík" }, { name: "R. Opelka" }, { name: "C. Garín" }, { name: "J. Tipsarević" }, { name: "G. Dimitrov" }, { name: "T. Fabbiano" }, { name: "M. Čilić" }, { name: "M. Cecchinato" }, { name: "N. Mahut" }, { name: "R. Haase" }, { name: "P. Kohlschreiber" }, { name: "J. Veselý" }, { name: "L. Mayer" }, { name: "M. Fucsovics" }, { name: "D. Schwartzman" }, { name: "M. Berrettini" }, { name: "P. Andújar" }, { name: "C. Ruud" }, { name: "E. Gulbis" }, { name: "M. Jaziri" }, { name: "O. Otte" }, { name: "L. Sonego" }, { name: "R. Federer" }, { name: "K. Nishikori" }, { name: "Q. Halys" }, { name: "J-W. Tsonga" }, { name: "P. Gojowczyk" }, { name: "A. Popyrin" }, { name: "U. Humbert" }, { name: "A. Ramos" }, { name: "L. Djere" }, { name: "Á. de Miñaur" }, { name: "B. Klahn" }, { name: "P. Carreño" }, { name: "J. Sousa" }, { name: "B. Paire" }, { name: "M. Copil" }, { name: "P-H. Herbert" }, { name: "D. Medvédev" }, { name: "N. Basilashvili" }, { name: "J.I. Lóndero" }, { name: "M. Zverev" }, { name: "R. Gasquet" }, { name: "A. Vatutin" }, { name: "C. Moutet" }, { name: "G. Andreozzi" }, { name: "G. Pella" }, { name: "D. Goffin" }, { name: "R. Berankis" }, { name: "M. Kecmanović" }, { name: "D. Kudla" }, { name: "Y. Maden" }, { name: "K. Coppejans" }, { name: "Y. Hanfmann" }, { name: "R. Nadal" }
   ]
 
-  constructor(public dialog: MatDialog, public cdRef: ChangeDetectorRef) {
+  constructor(public dialog: MatDialog, public cdRef: ChangeDetectorRef, private route: ActivatedRoute, private router: Router) {
     // this.championship.description = "Cuadro de Copa"
     // this.championship.name = "Diversificación"
     // this.championship.season = "2020-2021"
@@ -72,6 +75,7 @@ export class AppComponent {
   }
 
   createBracket(randomize: boolean) {
+
     this.numberOfRounds = Math.ceil(Math.log2(this.players.length))
     for (var i = 0; i < this.numberOfRounds; i++) {
 
@@ -134,9 +138,16 @@ export class AppComponent {
         matches: matches
       })
     }
-
+  /*   this.route.queryParams.subscribe(params => { console.log(params);
+      let id = params.id;
+      if(id == 1) {
+        this.championship = JSON.parse(JSON.stringify(SindromeDeDownCup));
+      } else if(id == 2) {
+        this.championship = JSON.parse(JSON.stringify(ParalisisCup));
+      }
+    });  */
     this.championship = JSON.parse(JSON.stringify(SindromeDeDownCup));
-     
+     var kk = 2;
   }
 
   loadChampionship($event: any) {
