@@ -1,6 +1,5 @@
-import { Component, OnInit, Inject } from '@angular/core';
+import { Component, OnInit, Inject, ChangeDetectorRef } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-new-dialog',
@@ -10,17 +9,22 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 export class NewDialogComponent implements OnInit {
 
   numberOfPlayers: number = 4
+
   constructor(public dialogRef: MatDialogRef<NewDialogComponent>, @Inject(MAT_DIALOG_DATA) public data: any) { }
 
   ngOnInit(): void {
-    this.generatePlayers()
+    console.log(this.data)
+    //According to https://medium.com/better-programming/expressionchangedafterithasbeencheckederror-in-angular-what-why-and-how-to-fix-it-c6bdc0b22787
+    setTimeout(() => {
+      this.generatePlayers()
+    })
   }
 
   generatePlayers() {
     this.data.players = []
     while (this.data.players.length < this.numberOfPlayers) {
       this.data.players.push({
-        name: "P " + (this.data.players.length+1)
+        name: "P " + (this.data.players.length + 1)
       })
     }
   }

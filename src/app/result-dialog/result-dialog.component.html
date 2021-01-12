@@ -1,7 +1,7 @@
 <div>
     <div class="round-details">
         {{data?.round?.name}}
-        <br />
+        <br/>
         <span class="date">{{data?.round?.description}}</span>
     </div>
 
@@ -11,7 +11,7 @@
         <div *ngFor="let result of data?.match?.resultA; trackBy: cmpare; let i=index" style="margin-left:10px;" >
             <input matInput type="number" min="0" max="999" placeholder="-"
                 [style.color]="data?.match?.resultA[i]>data?.match?.resultB[i]?'#35a461':'gray'"
-                [(ngModel)]="data?.match?.resultA[i]"
+                [(ngModel)]="data.match.resultA[i]"
                 (changes)="data?.match?.resultA[i]=data?.match?.resultA[i].toFixed()">
         </div>
         
@@ -22,7 +22,7 @@
         <div *ngFor="let result of data?.match?.resultB; trackBy: cmpare; let i=index" style="margin-left:10px;">
             <input matInput type="number" min="0" max="999" placeholder="-"
                 [style.color]="data?.match?.resultA[i]<data?.match?.resultB[i]?'#35a461':'gray'"
-                [(ngModel)]="data?.match?.resultB[i]">
+                [(ngModel)]="data.match.resultB[i]">
         </div>
     </div>
 </div>

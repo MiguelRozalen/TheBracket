@@ -1,0 +1,265 @@
+<input hidden type="file" #uploader accept=".bracket" (change)="loadBracket($event)" />
+
+<header class="hero">
+  <div class="hero-wrap">
+    <p class="intro notOutlined" id="intro" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"
+      contenteditable="true" [textContent]="bracket?.description"
+      (input)="bracket.description=$event.target.textContent"></p>
+    <h1 id="headline" class="notOutlined" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"
+      contenteditable="true" [textContent]="bracket?.name" (input)="bracket.name=$event.target.textContent">
+    </h1>
+    <p class="year">
+      <i class="fa fa-star"></i>
+      <span class="notOutlined" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"
+        contenteditable="true" [textContent]="bracket?.season"
+        (input)="bracket.season=$event.target.textContent"></span>
+      <i class="fa fa-star"></i></p>
+    <p class="notOutlined" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"
+      contenteditable="true" [textContent]="bracket?.league"
+      (input)="bracket.league=$event.target.textContent"></p>
+
+    <button mat-stroked-button (click)="uploader.click()">Load Bracket</button>
+    <button mat-flat-button (click)="newBracket()" style="margin-left:20px; background-color: #5cca87">New
+      Bracket</button>
+  </div>
+</header>
+
+<section id="bracket">
+  <div class="container">
+
+    <div class="split split-one">
+      <div class="round" [ngClass]="{current:index==bracket?.roundActive}"
+        *ngFor="let round of bracket?.rounds | slice:0:bracket?.rounds?.length-2 ; let index=index">
+        <div class="round-details">
+          <span contenteditable="true" [textContent]="round.name" class="notOutlined" autocomplete="off"
+            autocorrect="off" autocapitalize="off" spellcheck="false"
+            (input)="round.name=$event.target.textContent"></span><br />
+          <span contenteditable="true" [textContent]="round.description" class="notOutlined date" autocomplete="off"
+            autocorrect="off" autocapitalize="off" spellcheck="false"
+            (input)="round.description=$event.target.textContent"></span>
+        </div>
+        <ul class="matchup" [style.paddingTop.px]="getPadding(index)" [style.paddingBottom.px]="getPadding(index)"
+          *ngFor="let match of round?.matches | slice:0:(round?.matches?.length/2)">
+          <li (click)="setResult(match, round, bracket)" class="team team-top"
+            [ngClass]="{lose: match?.winner && match?.winner?.name!=match?.playerA?.name}">
+            {{match?.playerA?.name | slice:0:6}}
+
+            <input matInput type="text" placeholder="-"  *ngFor="let resultPlayerA of match?.resultA; let i = index; let l = count"
+            [ngClass]="i == 0 ? 'resultPlaceHolder  last' : 'resultPlaceHolder'"
+            [(ngModel)]="match?.resultA[(l - 1) - i]"
+            [style.color]="match?.resultB[(l - 1) - i]<match?.resultA[(l - 1) - i]?'#ff3300':'#ffe6ff'">
+
+            <span *ngIf="match?.playerA?.name" class="score"
+              [style.color]="match?.totalA>match?.totalB?'#35a461':'gray'">{{match?.totalA}}</span>
+          </li>
+          <li (click)="setResult(match, round, bracket)" class="team team-bottom"
+            [ngClass]="{lose: match?.winner && match?.winner?.name!=match?.playerB?.name}">{{match?.playerB?.name | slice:0:6}}
+
+            <input matInput type="text" placeholder="-"  *ngFor="let resultPlayerA of match?.resultA; let i = index; let l = count"
+            [ngClass]="i == 0 ? 'resultPlaceHolder  last' : 'resultPlaceHolder'"
+            [(ngModel)]="match?.resultB[(l - 1) - i]"
+            [style.color]="match?.resultA[(l - 1) - i]<match?.resultB[(l - 1) - i]?'#ff3300':'#ffe6ff'">
+
+            <span *ngIf="match?.playerB?.name" class="score"
+              [style.color]="match?.totalA<match?.totalB?'#35a461':'gray'">{{match?.totalB}}</span>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="champion">
+      <div class="semis-l" [ngClass]="{current:bracket?.rounds.length-2==bracket?.roundActive}">
+        <div class="round-details">
+          <span contenteditable="true" [textContent]="bracket?.rounds[bracket?.rounds.length-2].name"
+            class="notOutlined" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"
+            (input)="bracket?.rounds[bracket?.rounds?.length-2].name=$event.target.textContent"></span><br />
+          <span contenteditable="true" [textContent]="bracket?.rounds[bracket?.rounds.length-2].description"
+            class="notOutlined date" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"
+            (input)="bracket?.rounds[bracket?.rounds.length-2].description=$event.target.textContent"></span>
+        </div>
+        <ul class="matchup bracket">
+          <li
+            (click)="setResult(bracket?.rounds[bracket?.rounds?.length-2]?.matches[0], bracket?.rounds[bracket?.rounds?.length-2], bracket)"
+            style="text-align: left" class="team team-top"
+            [ngClass]="{lose: bracket?.rounds[bracket?.rounds?.length-2]?.matches[0]?.winner && bracket?.rounds[bracket?.rounds?.length-2]?.matches[0]?.winner?.name!=bracket?.rounds[bracket?.rounds?.length-2]?.matches[0]?.playerA?.name}">
+            {{bracket?.rounds[bracket?.rounds?.length-2]?.matches[0]?.playerA?.name | slice:0:6}}
+
+            <input matInput type="text" placeholder="-"  *ngFor="let resultPlayerA of bracket?.rounds[bracket?.rounds?.length-2]?.matches[0]?.resultA; let i = index; let l = count"
+            [ngClass]="i == 0 ? 'resultPlaceHolder  last' : 'resultPlaceHolder'"
+            [(ngModel)]="bracket?.rounds[bracket?.rounds?.length-2]?.matches[0]?.resultA[(l - 1) - i]"
+            [style.color]="bracket?.rounds[bracket?.rounds?.length-2]?.matches[0]?.resultA[(l - 1) - i]<bracket?.rounds[bracket?.rounds?.length-2]?.matches[0]?.resultB[(l - 1) - i]?'#ff3300':'#ffe6ff'">
+
+            <span *ngIf="bracket?.rounds[bracket?.rounds?.length-2]?.matches[0]?.playerA?.name" class="score"
+              [style.color]="bracket?.rounds[bracket?.rounds?.length-2]?.matches[0]?.totalA>bracket?.rounds[bracket?.rounds?.length-2]?.matches[0]?.totalB?'#35a461':'gray'">{{bracket?.rounds[bracket?.rounds?.length-2]?.matches[0]?.totalA}}</span>
+          </li>
+          <li
+            (click)="setResult(bracket?.rounds[bracket?.rounds?.length-2]?.matches[0], bracket?.rounds[bracket?.rounds?.length-2], bracket)"
+            style="text-align: left" class="team team-bottom"
+            [ngClass]="{lose: bracket?.rounds[bracket?.rounds?.length-2]?.matches[0]?.winner && bracket?.rounds[bracket?.rounds?.length-2]?.matches[0]?.winner?.name!=bracket?.rounds[bracket?.rounds?.length-2]?.matches[0]?.playerB?.name}">
+            {{bracket?.rounds[bracket?.rounds?.length-2]?.matches[0]?.playerB?.name | slice:0:6}}
+
+            <input matInput type="text" placeholder="-"  *ngFor="let resultPlayerA of bracket?.rounds[bracket?.rounds?.length-2]?.matches[0]?.resultA; let i = index; let l = count"
+            [ngClass]="i == 0 ? 'resultPlaceHolder  last' : 'resultPlaceHolder'"
+            [(ngModel)]="bracket?.rounds[bracket?.rounds?.length-2]?.matches[0]?.resultB[(l - 1) - i]"
+            [style.color]="bracket?.rounds[bracket?.rounds?.length-2]?.matches[0]?.resultB[(l - 1) - i]<bracket?.rounds[bracket?.rounds?.length-2]?.matches[0]?.resultA[(l - 1) - i]?'#ff3300':'#ffe6ff'">
+
+            <span *ngIf="bracket?.rounds[bracket?.rounds?.length-2]?.matches[0]?.playerB?.name" class="score"
+              [style.color]="bracket?.rounds[bracket?.rounds?.length-2]?.matches[0]?.totalA<bracket?.rounds[bracket?.rounds?.length-2]?.matches[0]?.totalB?'#35a461':'gray'">{{bracket?.rounds[bracket?.rounds?.length-2]?.matches[0]?.totalB}}</span>
+          </li>
+        </ul>
+      </div>
+
+      <div class="final" [ngClass]="{current:bracket?.rounds.length-1==bracket?.roundActive}">
+        <i class="fa fa-trophy"></i>
+        <div class="round-details">
+          <span contenteditable="true" [textContent]="bracket?.rounds[bracket?.rounds.length-1].name"
+            class="notOutlined" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"
+            (input)="bracket?.rounds[bracket?.rounds?.length-1].name=$event.target.textContent"></span><br />
+          <span contenteditable="true" [textContent]="bracket?.rounds[bracket?.rounds.length-1].description"
+            class="notOutlined date" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"
+            (input)="bracket?.rounds[bracket?.rounds.length-1].description=$event.target.textContent"></span>
+        </div>
+
+        <ul class="matchup bracket">
+          <li
+            (click)="setResult(bracket?.rounds[bracket?.rounds?.length-1]?.matches[0], bracket?.rounds[bracket?.rounds?.length-1], bracket)"
+            style="text-align: left" class="team team-top"
+            [ngClass]="{lose: bracket?.rounds[bracket?.rounds?.length-1]?.matches[0]?.winner && bracket?.rounds[bracket?.rounds?.length-1]?.matches[0]?.winner?.name!=bracket?.rounds[bracket?.rounds?.length-1]?.matches[0]?.playerA?.name}">
+            {{bracket?.rounds[bracket?.rounds?.length-1]?.matches[0]?.playerA?.name | slice:0:6}}
+
+            <input matInput type="text" placeholder="-"  *ngFor="let resultPlayerA of bracket?.rounds[bracket?.rounds?.length-2]?.matches[0]?.resultA; let i = index; let l = count"
+            [ngClass]="i == 0 ? 'resultPlaceHolder  last' : 'resultPlaceHolder'"
+            [(ngModel)]="bracket?.rounds[bracket?.rounds?.length-1]?.matches[0]?.resultA[(l - 1) - i]"
+            [style.color]="bracket?.rounds[bracket?.rounds?.length-1]?.matches[0]?.resultA[(l - 1) - i]<bracket?.rounds[bracket?.rounds?.length-1]?.matches[0]?.resultB[(l - 1) - i]?'#ff3300':'#ffe6ff'">
+
+          
+            <span *ngIf="bracket?.rounds[bracket?.rounds?.length-1]?.matches[0]?.playerA?.name" class="score"
+              [style.color]="bracket?.rounds[bracket?.rounds?.length-1]?.matches[0]?.totalA>bracket?.rounds[bracket?.rounds?.length-1]?.matches[0]?.totalB?'#35a461':'gray'">{{bracket?.rounds[bracket?.rounds?.length-1]?.matches[0]?.totalA}}</span>
+          </li>
+          <li
+            (click)="setResult(bracket?.rounds[bracket?.rounds?.length-1]?.matches[0], bracket?.rounds[bracket?.rounds?.length-1], bracket)"
+            style="text-align: left" class="team team-bottom"
+            [ngClass]="{lose: bracket?.rounds[bracket?.rounds?.length-1]?.matches[0]?.winner && bracket?.rounds[bracket?.rounds?.length-1]?.matches[0]?.winner?.name!=bracket?.rounds[bracket?.rounds?.length-1]?.matches[0]?.playerB?.name}">
+            {{bracket?.rounds[bracket?.rounds?.length-1]?.matches[0]?.playerB?.name | slice:0:6}}
+
+            <input matInput type="text" placeholder="-"  *ngFor="let resultPlayerA of bracket?.rounds[bracket?.rounds?.length-2]?.matches[0]?.resultA; let i = index; let l = count"
+            [ngClass]="i == 0 ? 'resultPlaceHolder  last' : 'resultPlaceHolder'"
+            [(ngModel)]="bracket?.rounds[bracket?.rounds?.length-1]?.matches[0]?.resultB[(l - 1) - i]"
+            [style.color]="bracket?.rounds[bracket?.rounds?.length-1]?.matches[0]?.resultB[(l - 1) - i]<bracket?.rounds[bracket?.rounds?.length-1]?.matches[0]?.resultA[(l - 1) - i]?'#ff3300':'#ffe6ff'">
+
+
+            <span *ngIf="bracket?.rounds[bracket?.rounds?.length-1]?.matches[0]?.playerB?.name" class="score"
+              [style.color]="bracket?.rounds[bracket?.rounds?.length-1]?.matches[0]?.totalA<bracket?.rounds[bracket?.rounds?.length-1]?.matches[0]?.totalB?'#35a461':'gray'">{{bracket?.rounds[bracket?.rounds?.length-1]?.matches[0]?.totalB}}</span>
+          </li>
+        </ul>
+      </div>
+
+      <div class="semis-r" [ngClass]="{current:bracket?.rounds.length-2==bracket?.roundActive}">
+        <div class="round-details">
+          <span contenteditable="true" [textContent]="bracket?.rounds[bracket?.rounds.length-2].name"
+            class="notOutlined" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"
+            (input)="bracket?.rounds[bracket?.rounds?.length-2].name=$event.target.textContent"></span><br />
+          <span contenteditable="true" [textContent]="bracket?.rounds[bracket?.rounds.length-2].description"
+            class="notOutlined date" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"
+            (input)="bracket?.rounds[bracket?.rounds.length-2].description=$event.target.textContent"></span>
+        </div>
+        <ul class="matchup bracket">
+          <li
+            (click)="setResult(bracket?.rounds[bracket?.rounds?.length-2]?.matches[1], bracket?.rounds[bracket?.rounds?.length-2], bracket)"
+            style="text-align: left" class="team team-top"
+            [ngClass]="{lose: bracket?.rounds[bracket?.rounds?.length-2]?.matches[1]?.winner && bracket?.rounds[bracket?.rounds?.length-2]?.matches[1]?.winner?.name!=bracket?.rounds[bracket?.rounds?.length-2]?.matches[1]?.playerA?.name}">
+            {{bracket?.rounds[bracket?.rounds?.length-2]?.matches[1]?.playerA?.name | slice:0:6}}
+
+            <input matInput type="text" placeholder="-"  *ngFor="let resultPlayerA of bracket?.rounds[bracket?.rounds?.length-2]?.matches[0]?.resultA; let i = index; let l = count"
+            [ngClass]="i == 0 ? 'resultPlaceHolder  last' : 'resultPlaceHolder'"
+            [(ngModel)]="bracket?.rounds[bracket?.rounds?.length-2]?.matches[1]?.resultA[(l - 1) - i]"
+            [style.color]="bracket?.rounds[bracket?.rounds?.length-2]?.matches[1]?.resultA[(l - 1) - i]<bracket?.rounds[bracket?.rounds?.length-2]?.matches[1]?.resultB[(l - 1) - i]?'#ff3300':'#ffe6ff'">
+
+            <span *ngIf="bracket?.rounds[bracket?.rounds?.length-2]?.matches[1]?.playerA?.name" class="score"
+              [style.color]="bracket?.rounds[bracket?.rounds?.length-2]?.matches[1]?.totalA>bracket?.rounds[bracket?.rounds?.length-2]?.matches[1]?.totalB?'#35a461':'gray'">{{bracket?.rounds[bracket?.rounds?.length-2]?.matches[1]?.totalA}}</span>
+          </li>
+          <li
+            (click)="setResult(bracket?.rounds[bracket?.rounds?.length-2]?.matches[1], bracket?.rounds[bracket?.rounds?.length-2], bracket)"
+            style="text-align: left" class="team team-bottom"
+            [ngClass]="{lose: bracket?.rounds[bracket?.rounds?.length-2]?.matches[1]?.winner && bracket?.rounds[bracket?.rounds?.length-2]?.matches[1]?.winner?.name!=bracket?.rounds[bracket?.rounds?.length-2]?.matches[1]?.playerB?.name}">
+            {{bracket?.rounds[bracket?.rounds?.length-2]?.matches[1]?.playerB?.name | slice:0:6}}
+
+            <input matInput type="text" placeholder="-"  *ngFor="let resultPlayerA of bracket?.rounds[bracket?.rounds?.length-2]?.matches[0]?.resultA; let i = index; let l = count"
+            [ngClass]="i == 0 ? 'resultPlaceHolder  last' : 'resultPlaceHolder'"
+            [(ngModel)]="bracket?.rounds[bracket?.rounds?.length-2]?.matches[1]?.resultB[(l - 1) - i]"
+            [style.color]="bracket?.rounds[bracket?.rounds?.length-2]?.matches[1]?.resultB[(l - 1) - i]<bracket?.rounds[bracket?.rounds?.length-2]?.matches[1]?.resultA[(l - 1) - i]?'#ff3300':'#ffe6ff'">
+
+
+            <span *ngIf="bracket?.rounds[bracket?.rounds?.length-2]?.matches[1]?.playerB?.name" class="score"
+              [style.color]="bracket?.rounds[bracket?.rounds?.length-2]?.matches[1]?.totalA<bracket?.rounds[bracket?.rounds?.length-2]?.matches[1]?.totalB?'#35a461':'gray'">{{bracket?.rounds[bracket?.rounds?.length-2]?.matches[1]?.totalB}}</span>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+
+    <div class="split split-two">
+      <div class="round" [ngClass]="{current:bracket?.rounds?.length-2-index-1==bracket?.roundActive}"
+        *ngFor="let round of (bracket?.rounds | slice:0:bracket?.rounds?.length-2)?.reverse(); let index=index">
+        <div class="round-details">{{round?.name}}<br /><span class="date">{{round?.description}}</span></div>
+        <ul class="matchup"
+          [style.paddingTop.px]="getPadding((bracket?.rounds | slice:0:bracket?.rounds?.length-2).length-1 - index)"
+          [style.paddingBottom.px]="getPadding((bracket?.rounds | slice:0:bracket?.rounds?.length-2).length-1 - index)"
+          *ngFor="let match of round?.matches | slice:(round?.matches?.length/2):round?.matches?.length">
+          <li (click)="setResult(match, round, bracket)" class="team team-top"
+            [ngClass]="{lose: match?.winner && match?.winner?.name!=match?.playerA?.name}">
+            {{match?.playerA?.name | slice:0:6}}
+
+            <input matInput type="text" placeholder="-"  *ngFor="let resultPlayerA of match?.resultA; let i = index; let l = count"
+            [ngClass]="i == 0 ? 'resultPlaceHolder  last' : 'resultPlaceHolder'"
+            [(ngModel)]="match?.resultA[(l - 1) - i]"
+            [style.color]="match?.resultA[(l - 1) - i]>match?.resultB[(l - 1) - i]?'#ff3300':'#ffe6ff'">
+
+            <span *ngIf="match?.playerA?.name" class="score"
+              [style.color]="match?.totalA>match?.totalB?'#35a461':'gray'">{{match?.totalA}}</span>
+          </li>
+          <li (click)="setResult(match, round, bracket)" class="team team-bottom"
+            [ngClass]="{lose: match?.winner && match?.winner?.name!=match?.playerB?.name}">{{match?.playerB?.name}}
+
+            <input matInput type="text" placeholder="-"  *ngFor="let resultPlayerA of match?.resultA; let i = index; let l = count"
+            [ngClass]="i == 0 ? 'resultPlaceHolder  last' : 'resultPlaceHolder'"
+            [(ngModel)]="match?.resultB[(l - 1) - i]"
+            [style.color]="match?.resultB[(l - 1) - i]>match?.resultA[(l - 1) - i]?'#ff3300':'#ffe6ff'">
+
+
+            <span *ngIf="match?.playerB?.name" class="score"
+              [style.color]="match?.totalA<match?.totalB?'#35a461':'gray'">{{match?.totalB}}</span>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+<section class="share">
+  <div class="share-wrap">
+    <a class="share-icon" href="https://github.com/MiguelRozalen/" target="_new"><i class="fa fa-github"></i></a>
+    <a class="share-icon" href="https://twitter.com/mklr93" target="_new"><i class="fa fa-twitter"></i></a>
+    <a class="share-icon" href="https://www.linkedin.com/in/miguel-a-rozalen-soriano-560408126/" target="_new"><i
+        class="fa fa-linkedin"></i></a>
+  </div>
+
+  <div class="copyright">
+    ©2020, TheBracket made with Angular by Miguel Á. Rozalén
+  </div>
+</section>
+
+<button matTooltip="Load Bracket" (click)="uploader.click()"
+  style="position: fixed; bottom: 125px; right: 15px; background-color: #5cca87;" mat-mini-fab color="accent">
+  <mat-icon class="floating-button-icon">folder</mat-icon>
+</button>
+
+<button matTooltip="Save Bracket" (click)="saveBracket()"
+  style="position: fixed; bottom: 70px; right: 15px; background-color: #5cca87;" mat-mini-fab color="accent">
+  <mat-icon class="floating-button-icon">save</mat-icon>
+</button>
+
+
+<button matTooltip="New Bracket" style="position: fixed; bottom: 15px; right: 15px; background-color: #5cca87;"
+  mat-mini-fab color="accent" (click)="newBracket()">
+  <mat-icon class="floating-button-icon">add</mat-icon>
+</button>
